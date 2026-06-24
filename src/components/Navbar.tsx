@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Github, Linkedin, Menu, X } from "lucide-react";
+import { ExternalLink, Link, Menu, X } from "lucide-react";
 import { siteConfig } from "@/lib/site";
 
 const links = [
@@ -65,8 +65,8 @@ export default function Navbar() {
           {/* Social + CTA */}
           <div style={{ display: "flex", alignItems: "center", gap: 8 }} className="hidden md:flex">
             {[
-              { href: siteConfig.githubUrl, Icon: Github, label: "GitHub" },
-              { href: siteConfig.linkedinUrl, Icon: Linkedin, label: "LinkedIn" },
+              { href: siteConfig.githubUrl, Icon: ExternalLink, label: "GitHub" },
+              { href: siteConfig.linkedinUrl, Icon: Link, label: "LinkedIn" },
             ].map(({ href, Icon, label }) => (
               <a key={href} href={href} target="_blank" rel="noopener noreferrer" aria-label={label}
                 style={{ width: 34, height: 34, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 8, color: "var(--text-3)", transition: "color 0.2s, background 0.2s", textDecoration: "none" }}
@@ -105,9 +105,9 @@ export default function Navbar() {
               ))}
             </div>
             <div style={{ display: "flex", gap: 12, marginTop: 32 }}>
-              <a href="https://github.com/miralhsn" target="_blank" rel="noopener noreferrer"
+              <a href={siteConfig.githubUrl} target="_blank" rel="noopener noreferrer"
                 style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "12px 0", background: "var(--surface-2)", border: "1px solid var(--border)", borderRadius: 10, color: "var(--text-2)", fontSize: "0.9rem", textDecoration: "none" }}>
-                <Github size={16} /> GitHub
+                <ExternalLink size={16} /> GitHub
               </a>
               <a href={`mailto:${siteConfig.contactEmail}`}
                 style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "12px 0", background: "var(--primary)", borderRadius: 10, color: "#fff", fontSize: "0.9rem", fontWeight: 600, textDecoration: "none" }}>

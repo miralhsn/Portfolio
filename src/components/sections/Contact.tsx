@@ -1,7 +1,7 @@
 "use client";
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { Mail, Github, Linkedin, ArrowRight } from "lucide-react";
+import { Mail, ExternalLink, Link, ArrowRight } from "lucide-react";
 import { siteConfig } from "@/lib/site";
 
 export default function Contact() {
@@ -12,7 +12,7 @@ export default function Contact() {
     <section id="contact" className="section" ref={ref} aria-label="Contact">
       <motion.div
         initial={{ opacity: 0, y: 24 }} animate={inView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.65, ease: [0.25, 0.46, 0.45, 0.94] }}
+        transition={{ duration: 0.65, ease: [0.25, 0.46, 0.45, 0.94] as const }}
         style={{ maxWidth: 720, margin: "0 auto", textAlign: "center" }}>
 
         <div className="section-label" style={{ justifyContent: "center", display: "flex" }}>Contact</div>
@@ -44,8 +44,8 @@ export default function Contact() {
           {/* Social row */}
           <div style={{ display: "flex", flexWrap: "wrap", gap: 12, justifyContent: "center" }}>
             {[
-              { href: siteConfig.githubUrl, Icon: Github, label: "miralhsn", desc: "GitHub" },
-              { href: siteConfig.linkedinUrl, Icon: Linkedin, label: "miral-hasan-26353b249", desc: "LinkedIn" },
+              { href: siteConfig.githubUrl, Icon: ExternalLink, label: "miralhsn", desc: "GitHub" },
+              { href: siteConfig.linkedinUrl, Icon: Link, label: "miral-hasan-26353b249", desc: "LinkedIn" },
             ].map(({ href, Icon, label, desc }) => (
               <a key={href} href={href} target="_blank" rel="noopener noreferrer"
                 style={{ display: "inline-flex", alignItems: "center", gap: 10, padding: "10px 20px", background: "var(--surface-2)", border: "1px solid var(--border-md)", borderRadius: 10, color: "var(--text-2)", fontSize: "0.85rem", textDecoration: "none", transition: "all 0.2s", minWidth: 0 }}

@@ -1,7 +1,7 @@
 "use client";
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { Github, ExternalLink, ArrowUpRight } from "lucide-react";
+import { ExternalLink, ArrowUpRight } from "lucide-react";
 import { siteConfig } from "@/lib/site";
 
 const systems = [
@@ -184,7 +184,7 @@ export default function Systems() {
                   style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "7px 14px", background: "var(--surface-2)", border: "1px solid var(--border-md)", borderRadius: 8, color: "var(--text-2)", fontSize: "0.8rem", fontWeight: 500, textDecoration: "none", transition: "color 0.2s, border-color 0.2s" }}
                   onMouseEnter={e => { const el = e.currentTarget; el.style.color = "var(--text-1)"; el.style.borderColor = "var(--border-hi)"; }}
                   onMouseLeave={e => { const el = e.currentTarget; el.style.color = "var(--text-2)"; el.style.borderColor = "var(--border-md)"; }}>
-                  <Github size={13} /> Source
+                  <ExternalLink size={13} /> Source
                 </a>
                 {sys.demo ? (
                   <a href={sys.demo} target="_blank" rel="noopener noreferrer"

@@ -2,7 +2,7 @@
 
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { Github, ExternalLink, Eye, Code2, BarChart2, Search } from "lucide-react";
+import { ExternalLink, Eye, Code2, BarChart2, Search } from "lucide-react";
 import { siteConfig } from "@/lib/site";
 
 const projects = [
@@ -142,7 +142,7 @@ export default function Projects() {
                   className="inline-flex items-center gap-2 text-sm text-white/50 hover:text-white/90 transition-colors"
                   aria-label={`${proj.title} on GitHub`}
                 >
-                  <Github size={14} /> Source
+                  <ExternalLink size={14} /> Source
                 </a>
                 {proj.demo ? (
                   <a

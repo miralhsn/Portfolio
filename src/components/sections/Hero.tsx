@@ -1,11 +1,11 @@
 "use client";
 import { motion } from "framer-motion";
-import { ArrowRight, Github } from "lucide-react";
+import { ArrowRight, ExternalLink } from "lucide-react";
 import { siteConfig } from "@/lib/site";
 
 const fadeUp = (delay = 0) => ({
   hidden: { opacity: 0, y: 22, filter: "blur(4px)" },
-  visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.7, delay, ease: [0.25, 0.46, 0.45, 0.94] } },
+  visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.7, delay, ease: [0.25, 0.46, 0.45, 0.94] as const } },
 });
 
 const pills = ["Computer Vision", "NLP", "RAG", "Agentic AI", "Scalable Backend"];
@@ -68,7 +68,7 @@ export default function Hero() {
             style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "12px 24px", background: "var(--surface-2)", border: "1px solid var(--border-md)", color: "var(--text-2)", fontWeight: 500, fontSize: "0.9rem", borderRadius: 11, textDecoration: "none", transition: "all 0.2s" }}
             onMouseEnter={e => { const el = e.currentTarget; el.style.color = "var(--text-1)"; el.style.borderColor = "var(--border-hi)"; el.style.transform = "translateY(-1px)"; }}
             onMouseLeave={e => { const el = e.currentTarget; el.style.color = "var(--text-2)"; el.style.borderColor = "var(--border-md)"; el.style.transform = "translateY(0)"; }}>
-            <Github size={16} /> GitHub
+            <ExternalLink size={16} /> GitHub
           </a>
           <a href="#contact"
             style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "12px 24px", background: "var(--surface-1)", border: "1px solid var(--border)", color: "var(--text-3)", fontWeight: 500, fontSize: "0.9rem", borderRadius: 11, textDecoration: "none", transition: "color 0.2s" }}
