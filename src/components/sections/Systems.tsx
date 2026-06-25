@@ -1,6 +1,9 @@
 "use client";
 
-import { SystemsShowcase } from "@/components/SystemsShowcase";
+import {
+  SystemsShowcase,
+  type SystemData,
+} from "@/components/SystemsShowcase";
 import { siteConfig } from "@/lib/site";
 
 const systems = [
@@ -49,7 +52,7 @@ const systems = [
       "94% precision on shoplifting detection. Sub-200ms alert latency from event to dashboard notification. Successfully deployed in 5 retail locations with 89% reduction in false alerts after LSTM classifier tuning.",
     lessonsLearned:
       "Multi-object tracking in retail requires domain-specific training data. Real-time alerting systems need aggressive false positive reduction. GPU memory management is critical for multi-stream inference. Human-in-the-loop validation essential for behavior classification in novel scenarios.",
-    fullStack: [
+    stack: [
       "Python",
       "YOLOv10",
       "DeepSORT",
@@ -63,7 +66,6 @@ const systems = [
     ],
     color: "#6D5EF8",
     github: siteConfig.githubUrl,
-    demo: null,
   },
   {
     id: "code-reviewer",
@@ -110,7 +112,7 @@ const systems = [
       "Reduced manual review cycle time by ~35% in pilot. Zero hallucinated line references in 500+ code reviews. 92% precision on security issue detection (validated by human reviewers). False positive rate: 8% on stylistic suggestions.",
     lessonsLearned:
       "Function calling significantly improves LLM output reliability vs prompt engineering alone. AST parsing is essential for code analysis—line-based chunking causes semantic confusion. Severity scoring prevents reviewer fatigue. Integration with CI/CD must be non-blocking to avoid pipeline slowdowns.",
-    fullStack: [
+    stack: [
       "Python",
       "OpenAI API",
       "LangChain",
@@ -123,7 +125,6 @@ const systems = [
     ],
     color: "#7EE7FF",
     github: siteConfig.githubUrl,
-    demo: null,
   },
   {
     id: "semantic-search",
@@ -171,7 +172,7 @@ const systems = [
       "< 800ms end-to-end latency (including embedding, retrieval, generation). NDCG@10 of 0.89 on internal evaluation set (20,000 queries). User satisfaction: 87% found top result relevant on blind eval. ~12% reduction in \"no relevant results\" queries vs pure BM25.",
     lessonsLearned:
       "Hybrid retrieval essential for production robustness. Embedding quality is bottleneck—invest in fine-tuned embeddings for domain-specific corpora. Source attribution reduces hallucination perception significantly. Chunking strategy domain-specific: legal documents need different granularity than technical docs.",
-    fullStack: [
+    stack: [
       "Python",
       "LangChain",
       "FAISS",
@@ -183,7 +184,6 @@ const systems = [
     ],
     color: "#C084FC",
     github: siteConfig.githubUrl,
-    demo: null,
   },
   {
     id: "xai-dashboard",
@@ -230,7 +230,7 @@ const systems = [
       "Deployed across 3 internal teams (finance, fraud, operations). 60% reduction in stakeholder Q&A sessions about model decisions. 94% user confidence in model after using dashboard (vs 42% before). PDF audit reports adopted by compliance team for quarterly reviews.",
     lessonsLearned:
       "Visualization > numbers for stakeholder communication. Interactive charts allow exploratory understanding vs static reports. SHAP values require careful framing (not causal). Combining global (SHAP) + local (LIME) explanations provides better intuition. Documentation critical: users often misinterpret feature importance.",
-    fullStack: [
+    stack: [
       "Python",
       "SHAP",
       "LIME",
@@ -243,7 +243,6 @@ const systems = [
     ],
     color: "#F59E0B",
     github: siteConfig.githubUrl,
-    demo: null,
   },
 ];
 
