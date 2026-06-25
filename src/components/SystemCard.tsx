@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import type { Variants } from "framer-motion";
 import { useRef, useState } from "react";
 
 interface SystemCardProps {
@@ -13,7 +14,25 @@ interface SystemCardProps {
   onCardClick: (id: string) => void;
 }
 
-export const SystemCard = ({
+const cardVariants = {
+  initial: {
+    opacity: 0,
+    y: 20,
+  },
+  animate: {
+    opacity: 1,
+    y: 0,
+  },
+  hover: {
+    y: -8,
+    transition: {
+      duration: 0.3,
+      ease: [0.25, 0.1, 0.25, 1] as const,
+    },
+  },
+} satisfies Variants;
+
+export function SystemCard({
   id,
   name,
   description,
@@ -21,32 +40,25 @@ export const SystemCard = ({
   impactMetric,
   color,
   onCardClick,
-}: SystemCardProps) => {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+}: SystemCardProps) {
+  const [mousePosition, setMousePosition] = useState({
+    x: 0,
+    y: 0,
+  });
+
   const cardRef = useRef<HTMLDivElement>(null);
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleMouseMove = (
+    e: React.MouseEvent<HTMLDivElement>
+  ) => {
     if (!cardRef.current) return;
 
     const rect = cardRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
 
-    setMousePosition({ x, y });
-  };
-
-  const cardVariants = {
-    initial: { opacity: 0, y: 20 },
-    animate: { opacity: 1, y: 0 },
-    hover: {
-      y: -8,
-      transition: { duration: 0.3, ease: "easeOut" },
-    },
-  };
-
-  const imageVariants = {
-    initial: { scale: 1 },
-    hover: { scale: 1.02 },
+    setMousePosition({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    });
   };
 
   return (
@@ -60,18 +72,22 @@ export const SystemCard = ({
       onMouseMove={handleMouseMove}
       className="group relative h-full cursor-pointer overflow-hidden rounded-[20px] border border-white/10 transition-all duration-300 hover:border-white/20"
       style={{
-        background: `linear-gradient(135deg, rgba(109,94,248,0.05) 0%, rgba(126,231,255,0.02) 100%)`,
+        background:
+          "linear-gradient(135deg, rgba(109,94,248,0.05) 0%, rgba(126,231,255,0.02) 100%)",
         backdropFilter: "blur(8px)",
       }}
     >
-      {/* Magnetic glow effect */}
+      {/* Magnetic glow */}
       <motion.div
         className="pointer-events-none absolute rounded-full"
         animate={{
           x: mousePosition.x - 75,
           y: mousePosition.y - 75,
         }}
-        transition={{ duration: 0.1, ease: "linear" }}
+        transition={{
+          duration: 0.1,
+          ease: [0, 0, 1, 1],
+        }}
         style={{
           width: 150,
           height: 150,
@@ -80,70 +96,67 @@ export const SystemCard = ({
         }}
       />
 
-      {/* Accent border glow */}
+      {/* Accent glow */}
       <motion.div
-        className="absolute inset-0 rounded-[20px] pointer-events-none"
+        className="pointer-events-none absolute inset-0 rounded-[20px]"
         style={{
           background: `linear-gradient(135deg, ${color}20, transparent 70%)`,
-          opacity: 0,
         }}
+        initial={{ opacity: 0 }}
         whileHover={{ opacity: 1 }}
         transition={{ duration: 0.3 }}
       />
 
-      {/* Content */}
-      <div className="relative z-10 h-full p-6 sm:p-8 flex flex-col">
+      <div className="relative z-10 flex h-full flex-col p-6 sm:p-8">
         {/* Header */}
         <div className="mb-4">
           <motion.div
-            style={{ color }}
-            className="text-xs font-mono font-bold uppercase tracking-widest mb-3 opacity-0 group-hover:opacity-100 transition-opacity"
             initial={{ opacity: 0 }}
             whileHover={{ opacity: 1 }}
+            style={{ color }}
+            className="mb-3 text-xs font-mono font-bold uppercase tracking-widest opacity-0 transition-opacity group-hover:opacity-100"
           >
             {id.toUpperCase()}
           </motion.div>
 
-          <h3 className="text-xl sm:text-2xl font-bold text-white mb-2 line-clamp-2">
+          <h3 className="mb-2 line-clamp-2 text-xl font-bold text-white sm:text-2xl">
             {name}
           </h3>
 
-          <p className="text-sm text-slate-400 line-clamp-2 leading-relaxed">
+          <p className="line-clamp-2 text-sm leading-relaxed text-slate-400">
             {description}
           </p>
         </div>
 
-        {/* Tech Stack - Horizontal scroll on mobile */}
+        {/* Tech Stack */}
         <div className="mb-4 flex flex-wrap gap-2 overflow-x-auto pb-2">
           {techStack.slice(0, 3).map((tech) => (
-            <motion.span
+            <span
               key={tech}
-              className="px-2.5 py-1 rounded text-xs font-mono font-semibold whitespace-nowrap"
+              className="whitespace-nowrap rounded px-2.5 py-1 text-xs font-mono font-semibold"
               style={{
                 background: `${color}20`,
                 border: `1px solid ${color}40`,
-                color: color,
-              }}
-              whileHover={{
-                background: `${color}30`,
-                borderColor: `${color}60`,
+                color,
               }}
             >
               {tech}
-            </motion.span>
+            </span>
           ))}
+
           {techStack.length > 3 && (
-            <span className="px-2.5 py-1 rounded text-xs text-slate-400 font-mono">
+            <span className="rounded px-2.5 py-1 font-mono text-xs text-slate-400">
               +{techStack.length - 3}
             </span>
           )}
         </div>
 
-        {/* Impact Metric - grows to fill space */}
+        {/* Impact */}
         <div className="mt-auto">
-          <p className="text-xs text-slate-500 font-mono uppercase tracking-wider mb-1">
+          <p className="mb-1 text-xs font-mono uppercase tracking-wider text-slate-500">
             Impact
           </p>
+
           <p
             className="text-sm font-semibold leading-snug"
             style={{ color }}
@@ -152,19 +165,23 @@ export const SystemCard = ({
           </p>
         </div>
 
-        {/* Footer interaction hint */}
+        {/* Footer */}
         <motion.div
-          className="mt-4 pt-4 border-t border-white/10 flex items-center justify-between"
           initial={{ opacity: 0 }}
           whileHover={{ opacity: 1 }}
           transition={{ duration: 0.2 }}
+          className="mt-4 flex items-center justify-between border-t border-white/10 pt-4"
         >
-          <span className="text-xs text-slate-500 uppercase tracking-wider">
+          <span className="text-xs uppercase tracking-wider text-slate-500">
             Click to explore
           </span>
+
           <motion.div
             animate={{ x: [0, 4, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
+            transition={{
+              duration: 1.5,
+              repeat: Infinity,
+            }}
             className="text-slate-400"
           >
             →
@@ -173,4 +190,4 @@ export const SystemCard = ({
       </div>
     </motion.div>
   );
-};
+}
