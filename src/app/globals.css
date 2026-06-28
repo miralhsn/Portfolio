@@ -6,62 +6,101 @@
 :root {
   /* Surface */
   --bg:          #070B14;
-  --surface-1:   rgba(255,255,255,0.04);
-  --surface-2:   rgba(255,255,255,0.08);
-  --surface-3:   rgba(255,255,255,0.12);
-  --surface-glass: rgba(7,11,20,0.35);
+  --surface-1:   rgba(255,255,255,0.03);
+  --surface-2:   rgba(255,255,255,0.06);
+  --surface-3:   rgba(255,255,255,0.1);
+  --surface-glass: rgba(7,11,20,0.45);
 
   /* Borders */
-  --border:      rgba(255,255,255,0.06);
-  --border-md:   rgba(255,255,255,0.1);
-  --border-hi:   rgba(109,94,248,0.4);
-  --border-glow: rgba(126,231,255,0.25);
+  --border:      rgba(255,255,255,0.05);
+  --border-md:   rgba(255,255,255,0.09);
+  --border-hi:   rgba(109,94,248,0.35);
+  --border-glow: rgba(126,231,255,0.2);
 
-  /* Brand */
+  /* Brand Colors */
   --primary:     #6D5EF8;
-  --primary-dim: rgba(109,94,248,0.15);
-  --primary-glow: rgba(109,94,248,0.3);
+  --primary-dim: rgba(109,94,248,0.12);
+  --primary-glow: rgba(109,94,248,0.25);
   --accent:      #7EE7FF;
-  --accent-dim:  rgba(126,231,255,0.12);
-  --accent-glow: rgba(126,231,255,0.25);
+  --accent-dim:  rgba(126,231,255,0.1);
+  --accent-glow: rgba(126,231,255,0.2);
   --highlight:   #C084FC;
-  --highlight-dim: rgba(192,132,252,0.12);
+  --highlight-dim: rgba(192,132,252,0.1);
   --violet:      #a855f7;
-  --violet-dim:  rgba(168,85,247,0.1);
+  --violet-dim:  rgba(168,85,247,0.08);
 
-  /* Text */
+  /* Text Colors */
   --text-1:  #F8FAFC;
   --text-2:  #CBD5E1;
   --text-3:  #94A3B8;
   --text-4:  #64748B;
 
-  /* Radius */
-  --r-sm:  8px;
-  --r-md:  12px;
-  --r-lg:  16px;
-  --r-xl:  20px;
-  --r-2xl: 24px;
-
-  /* Shadows - Premium Layered */
+  /* Shadows - Premium Layered & Glows */
   --shadow-xs: 0 1px 2px rgba(0,0,0,0.3);
   --shadow-sm: 0 2px 8px rgba(0,0,0,0.35);
   --shadow-md: 0 4px 16px rgba(0,0,0,0.4);
   --shadow-lg: 0 8px 24px rgba(0,0,0,0.45);
   --shadow-xl: 0 12px 48px rgba(0,0,0,0.5);
   --shadow-card: var(--shadow-lg);
-  --shadow-glow: 0 0 40px var(--primary-glow), 0 0 80px rgba(109,94,248,0.15);
-  --shadow-accent-glow: 0 0 40px var(--accent-glow), 0 0 80px rgba(126,231,255,0.1);
-  --shadow-hover: 0 20px 60px rgba(109,94,248,0.2), 0 0 40px rgba(126,231,255,0.1);
+  --shadow-glow: 0 0 30px var(--primary-glow), 0 0 60px rgba(109,94,248,0.12);
+  --shadow-accent-glow: 0 0 30px var(--accent-glow), 0 0 60px rgba(126,231,255,0.08);
+  --shadow-hover: 0 15px 45px rgba(109,94,248,0.15), 0 0 30px rgba(126,231,255,0.08);
 
-  /* Gradients - Aurora */
+  /* Radius Curve Sizes */
+  --r-sm:  8px;
+  --r-md:  12px;
+  --r-lg:  16px;
+  --r-xl:  20px;
+  --r-2xl: 24px;
+
+  /* Typography Scale */
+  --fs-xs:   0.75rem;
+  --fs-sm:   0.875rem;
+  --fs-md:   1rem;
+  --fs-lg:   1.125rem;
+  --fs-xl:   1.25rem;
+  --fs-2xl:  1.5rem;
+  --fs-3xl:  1.875rem;
+  --fs-4xl:  2.25rem;
+  --fs-5xl:  3rem;
+  --fs-6xl:  3.75rem;
+  --fs-7xl:  4.5rem;
+
+  /* Typography Weights */
+  --fw-light:    300;
+  --fw-normal:   400;
+  --fw-medium:   500;
+  --fw-semibold: 600;
+  --fw-bold:     700;
+
+  /* Spacing Scale */
+  --space-xs:  0.5rem;
+  --space-sm:  0.75rem;
+  --space-md:  1rem;
+  --space-lg:  1.5rem;
+  --space-xl:  2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+
+  /* Gradients */
   --gradient-aurora: linear-gradient(135deg, #6D5EF8 0%, #7EE7FF 50%, #C084FC 100%);
   --gradient-primary-accent: linear-gradient(90deg, #6D5EF8 0%, #7EE7FF 100%);
   --gradient-accent-highlight: linear-gradient(90deg, #7EE7FF 0%, #C084FC 100%);
   --gradient-dark: linear-gradient(135deg, rgba(109,94,248,0.08) 0%, rgba(126,231,255,0.05) 100%);
 
-  /* Animations */
+  /* Blur Layers */
+  --blur-sm: 4px;
+  --blur-md: 8px;
+  --blur-lg: 16px;
+  --blur-xl: 24px;
+
+  /* Animation Timings */
+  --transition-fast:   150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow:   400ms cubic-bezier(0.4, 0, 0.2, 1);
+
   --animation-float: 3s ease-in-out infinite;
-  --animation-glow: 2s ease-in-out infinite;
+  --animation-glow:  2s ease-in-out infinite;
   --animation-pulse: 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 

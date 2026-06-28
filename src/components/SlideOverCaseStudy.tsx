@@ -1,25 +1,25 @@
 "use client";
 
+import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import type { Variants } from "framer-motion";
-import { X, ExternalLink } from "lucide-react";
-import { ArchitectureDiagram } from "./ArchitectureDiagram";
+import { X, ExternalLink, GitBranch, ShieldAlert, Award, Layers, Terminal } from "lucide-react";
 
-interface CaseStudyData {
+export interface CaseStudyData {
   id: string;
   name: string;
   tagline: string;
+  status: string;
+  shortDescription: string;
   description: string;
   problem: string;
-  architecture: Array<{
-    step: string;
-    detail: string;
-  }>;
+  solution: string;
+  architecture: Array<{ step: string; detail: string }>;
+  workflow: Array<{ title: string; description: string }>;
   technicalDecisions: string;
   challenges: string;
   results: string;
   lessonsLearned: string;
-  stack: string[];
+  techStack: string[];
   color: string;
   github?: string;
   demo?: string;
@@ -31,232 +31,233 @@ interface SlideOverCaseStudyProps {
   onClose: () => void;
 }
 
-const slideVariants = {
-  hidden: {
-    x: "100%",
-  },
-  visible: {
-    x: 0,
-    transition: {
-      duration: 0.4,
-      ease: [0.32, 0.72, 0.55, 1] as const,
-    },
-  },
-  exit: {
-    x: "100%",
-    transition: {
-      duration: 0.3,
-    },
-  },
-} satisfies Variants;
+export function SlideOverCaseStudy({ isOpen, data, onClose }: SlideOverCaseStudyProps) {
+  // Listen for Escape key and lock body scrolling when open
+  useEffect(() => {
+    if (!isOpen) return;
 
-const backdropVariants = {
-  hidden: {
-    opacity: 0,
-  },
-  visible: {
-    opacity: 1,
-  },
-  exit: {
-    opacity: 0,
-  },
-} satisfies Variants;
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
 
-export function SlideOverCaseStudy({
-  isOpen,
-  data,
-  onClose,
-}: SlideOverCaseStudyProps) {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isOpen, onClose]);
+
   if (!data) return null;
 
   return (
     <AnimatePresence>
       {isOpen && (
-        <>
+        <div className="fixed inset-0 z-50 flex justify-end" role="dialog" aria-modal="true">
+          {/* Backdrop blur */}
           <motion.div
-            variants={backdropVariants}
-            initial="hidden"
-            animate="visible"
-            exit="exit"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/60 backdrop-blur-xs"
           />
 
+          {/* Slide Over Panel */}
           <motion.div
-            variants={slideVariants}
-            initial="hidden"
-            animate="visible"
-            exit="exit"
-            className="fixed right-0 top-0 bottom-0 z-50 w-full overflow-y-auto sm:w-2/3 lg:w-1/2"
-            style={{
-              background:
-                "linear-gradient(135deg, #070B14 0%, rgba(126,231,255,0.02) 100%)",
-              backdropFilter: "blur(16px)",
-              borderLeft: "1px solid rgba(255,255,255,0.1)",
-            }}
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ type: "spring", damping: 30, stiffness: 220 }}
+            className="relative z-10 w-full sm:w-[640px] h-full bg-[#070B14] border-l border-white/[0.08] shadow-[0_0_60px_rgba(0,0,0,0.85)] flex flex-col"
           >
-            <motion.button
-              onClick={onClose}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-              className="sticky top-6 right-6 z-10 rounded-lg border border-white/10 bg-white/5 p-2 transition-colors hover:bg-white/10"
-            >
-              <X size={20} className="text-white/70 hover:text-white" />
-            </motion.button>
-
-            <div className="max-w-2xl p-8 sm:p-10">
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
-                className="mb-8"
+            {/* Header Toolbar */}
+            <div className="sticky top-0 z-10 flex items-center justify-between border-b border-white/[0.06] bg-[#070B14]/80 px-6 py-4 backdrop-blur-md">
+              <div className="flex items-center gap-2">
+                <span
+                  className="h-2 w-2 rounded-full"
+                  style={{
+                    backgroundColor: data.color,
+                    boxShadow: `0 0 10px ${data.color}`,
+                  }}
+                />
+                <span className="font-mono text-xs font-bold uppercase tracking-widest text-slate-400">
+                  Case Study // {data.id}
+                </span>
+              </div>
+              <button
+                onClick={onClose}
+                aria-label="Close case study panel"
+                className="rounded-lg border border-white/[0.08] bg-white/[0.02] p-2 text-slate-400 hover:text-white hover:bg-white/[0.06] transition-all"
               >
-                <div
-                  className="mb-3 text-xs font-mono font-bold uppercase tracking-widest"
-                  style={{ color: data.color }}
-                >
-                  Case Study
-                </div>
+                <X size={15} />
+              </button>
+            </div>
 
-                <h2 className="mb-2 text-4xl font-bold text-white">
+            {/* Scrollable Contents */}
+            <div className="flex-1 overflow-y-auto p-6 sm:p-8 space-y-10 scrollbar-thin">
+              {/* Title & Tagline */}
+              <div>
+                <h2 className="text-3xl font-extrabold text-white tracking-tight font-mono mb-2 uppercase">
                   {data.name}
                 </h2>
-
-                <p
-                  className="text-sm font-mono opacity-80"
-                  style={{ color: data.color }}
-                >
+                <p className="text-sm font-mono" style={{ color: data.color }}>
                   {data.tagline}
                 </p>
-              </motion.div>
+              </div>
 
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.15 }}
-                className="mb-8 border-b border-white/10 pb-8"
-              >
-                <p className="text-sm leading-relaxed text-slate-300">
+              {/* Case Study Overview */}
+              <div className="rounded-2xl border border-white/[0.04] bg-white/[0.01] p-5">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-white font-mono mb-3 flex items-center gap-2">
+                  <Terminal size={14} className="text-slate-500" />
+                  <span>Project Overview</span>
+                </h3>
+                <p className="text-xs leading-relaxed text-slate-400">
                   {data.description}
                 </p>
-              </motion.div>
+              </div>
 
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                className="mb-8"
-              >
-                <h3 className="mb-3 text-lg font-bold text-white">Problem</h3>
+              {/* Problem vs Solution */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="rounded-xl border border-red-500/10 bg-red-500/[0.01] p-5">
+                  <h4 className="text-[10px] font-bold uppercase tracking-wider text-red-400 font-mono mb-2 flex items-center gap-1.5">
+                    <ShieldAlert size={12} />
+                    <span>The Problem</span>
+                  </h4>
+                  <p className="text-[11px] leading-relaxed text-slate-400">
+                    {data.problem}
+                  </p>
+                </div>
+                <div className="rounded-xl border border-emerald-500/10 bg-emerald-500/[0.01] p-5">
+                  <h4 className="text-[10px] font-bold uppercase tracking-wider text-emerald-400 font-mono mb-2 flex items-center gap-1.5">
+                    <Award size={12} />
+                    <span>The Solution</span>
+                  </h4>
+                  <p className="text-[11px] leading-relaxed text-slate-400">
+                    {data.solution}
+                  </p>
+                </div>
+              </div>
 
-                <p className="text-sm leading-relaxed text-slate-400">
-                  {data.problem}
-                </p>
-              </motion.div>
+              {/* Architecture Steps (Linear Flow) */}
+              <div>
+                <h3 className="text-xs font-bold uppercase tracking-wider text-white font-mono mb-6 flex items-center gap-2">
+                  <Layers size={14} className="text-slate-500" />
+                  <span>System Architecture</span>
+                </h3>
+                <div className="relative border-l border-white/[0.08] ml-3 pl-6 space-y-6">
+                  {data.architecture.map((step, index) => (
+                    <div key={index} className="relative">
+                      {/* Bouncing bullet dot */}
+                      <span
+                        className="absolute -left-[30px] top-1.5 h-2 w-2 rounded-full"
+                        style={{
+                          backgroundColor: data.color,
+                          boxShadow: `0 0 8px ${data.color}`,
+                        }}
+                      />
+                      <span className="font-mono text-[10px] font-bold uppercase" style={{ color: data.color }}>
+                        {step.step}
+                      </span>
+                      <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                        {step.detail}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
 
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.25 }}
-                className="mb-8 rounded-xl border border-white/10 p-6"
+              {/* System Workflow Schema */}
+              <div className="rounded-2xl border border-white/[0.04] bg-[#070B14] p-5 space-y-4">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-white font-mono flex items-center gap-2">
+                  <GitBranch size={14} className="text-slate-500" />
+                  <span>System Workflow</span>
+                </h3>
+                <div className="grid grid-cols-1 gap-2 pt-2">
+                  {data.workflow.map((flow, index) => (
+                    <div
+                      key={index}
+                      className="flex items-start gap-3 rounded-lg border border-white/[0.03] bg-white/[0.01] p-3 hover:border-white/[0.08] transition-colors"
+                    >
+                      <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded bg-white/[0.04] font-mono text-[9px] font-bold text-slate-400">
+                        {index + 1}
+                      </div>
+                      <div>
+                        <div className="text-[11px] font-semibold text-white uppercase tracking-wider font-mono">
+                          {flow.title}
+                        </div>
+                        <p className="text-[10px] text-slate-400 mt-1 leading-relaxed">
+                          {flow.description}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Details grid: decisions and challenges */}
+              <div className="space-y-6">
+                <div>
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-slate-200 font-mono mb-2">
+                    Technical Decisions
+                  </h4>
+                  <p className="text-xs leading-relaxed text-slate-400">
+                    {data.technicalDecisions}
+                  </p>
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-slate-200 font-mono mb-2">
+                    Challenges
+                  </h4>
+                  <p className="text-xs leading-relaxed text-slate-400">
+                    {data.challenges}
+                  </p>
+                </div>
+              </div>
+
+              {/* Results & Impact Card */}
+              <div
+                className="rounded-2xl border p-5 backdrop-blur-md"
                 style={{
-                  background:
-                    "linear-gradient(135deg, rgba(109,94,248,0.05) 0%, rgba(126,231,255,0.02) 100%)",
+                  borderColor: `${data.color}30`,
+                  backgroundColor: `${data.color}04`,
                 }}
               >
-                <h3 className="mb-6 text-lg font-bold text-white">
-                  System Architecture
-                </h3>
-
-                <ArchitectureDiagram
-                  steps={data.architecture}
-                  color={data.color}
-                />
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-                className="mb-8"
-              >
-                <h3 className="mb-3 text-lg font-bold text-white">
-                  Technical Decisions
-                </h3>
-
-                <p className="text-sm leading-relaxed text-slate-400">
-                  {data.technicalDecisions}
-                </p>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.35 }}
-                className="mb-8"
-              >
-                <h3 className="mb-3 text-lg font-bold text-white">
-                  Challenges
-                </h3>
-
-                <p className="text-sm leading-relaxed text-slate-400">
-                  {data.challenges}
-                </p>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-                className="mb-8 rounded-xl border border-white/10 p-6"
-                style={{
-                  background: `linear-gradient(135deg, ${data.color}15, transparent)`,
-                  borderColor: `${data.color}40`,
-                }}
-              >
-                <h3 className="mb-3 text-lg font-bold text-white">Results</h3>
-
-                <p
-                  className="text-sm font-semibold leading-relaxed"
-                  style={{ color: data.color }}
-                >
+                <h4 className="text-xs font-bold uppercase tracking-wider font-mono mb-2" style={{ color: data.color }}>
+                  Results & Impact
+                </h4>
+                <p className="text-xs leading-relaxed text-slate-300">
                   {data.results}
                 </p>
-              </motion.div>
+              </div>
 
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.45 }}
-                className="mb-8"
-              >
-                <h3 className="mb-3 text-lg font-bold text-white">
+              {/* Lessons Learned */}
+              <div>
+                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-200 font-mono mb-2">
                   Lessons Learned
-                </h3>
-
-                <p className="text-sm leading-relaxed text-slate-400">
+                </h4>
+                <p className="text-xs leading-relaxed text-slate-400">
                   {data.lessonsLearned}
                 </p>
-              </motion.div>
+              </div>
 
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5 }}
-                className="mb-8"
-              >
-                <h3 className="mb-4 text-lg font-bold text-white">
-                  Tech Stack
-                </h3>
-
+              {/* Complete Tech Stack badges */}
+              <div>
+                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-200 font-mono mb-3">
+                  Full Tech Stack
+                </h4>
                 <div className="flex flex-wrap gap-2">
-                  {data.stack.map((tech) => (
+                  {data.techStack.map((tech) => (
                     <span
                       key={tech}
-                      className="rounded-lg px-3 py-1.5 text-xs font-mono font-semibold"
+                      className="rounded-lg border px-3 py-1 font-mono text-[10px] font-medium"
                       style={{
-                        background: `${data.color}20`,
-                        border: `1px solid ${data.color}40`,
+                        borderColor: `${data.color}30`,
+                        backgroundColor: `${data.color}08`,
                         color: data.color,
                       }}
                     >
@@ -264,45 +265,40 @@ export function SlideOverCaseStudy({
                     </span>
                   ))}
                 </div>
-              </motion.div>
+              </div>
+            </div>
 
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.55 }}
-                className="flex gap-4 border-t border-white/10 pt-8"
-              >
-                {data.github && (
-                  <a
-                    href={data.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-white/10"
-                  >
-                    <ExternalLink size={16} />
-                    View Source
-                  </a>
-                )}
-
-                {data.demo && (
-                  <a
-                    href={data.demo}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-white transition-all"
-                    style={{
-                      background: `${data.color}20`,
-                      border: `1px solid ${data.color}40`,
-                    }}
-                  >
-                    <ExternalLink size={16} />
-                    Live Demo
-                  </a>
-                )}
-              </motion.div>
+            {/* Sticky Action Footer */}
+            <div className="sticky bottom-0 border-t border-white/[0.06] bg-[#070B14] px-6 py-4 flex gap-4">
+              {data.github && (
+                <a
+                  href={data.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 flex items-center justify-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.06] py-3 text-xs font-semibold text-white transition-all"
+                >
+                  <ExternalLink size={14} />
+                  <span>GitHub Repository</span>
+                </a>
+              )}
+              {data.demo && (
+                <a
+                  href={data.demo}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 flex items-center justify-center gap-2 rounded-xl py-3 text-xs font-semibold text-white transition-all shadow-md"
+                  style={{
+                    backgroundColor: `${data.color}20`,
+                    border: `1px solid ${data.color}40`,
+                  }}
+                >
+                  <ExternalLink size={14} />
+                  <span>Live Demonstration</span>
+                </a>
+              )}
             </div>
           </motion.div>
-        </>
+        </div>
       )}
     </AnimatePresence>
   );
