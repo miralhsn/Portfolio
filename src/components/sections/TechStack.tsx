@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import HeadlineReveal from "@/components/motion/HeadlineReveal";
 import ParticleEmitter from "./ParticleEmitter";
+import FlowingLines from "./FlowingLines";
 import { Cpu, Terminal, Layers, Globe, Server, Database } from "lucide-react";
 
 type LogoId =
@@ -343,6 +344,11 @@ function LogoRail({ items, reverse = false }: { items: ToolItem[]; reverse?: boo
             <div className="absolute inset-0 bg-radial-glow opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
                  style={{ background: "radial-gradient(circle, rgba(216, 209, 194, 0.04) 0%, transparent 70%)" }} />
 
+            {/* Hover Tooltip */}
+            <div className="absolute bottom-[82%] left-1/2 -translate-x-1/2 mb-2 px-2.5 py-1 bg-black border border-white/10 rounded text-[9px] font-mono text-[var(--color-accent)] opacity-0 pointer-events-none group-hover:opacity-100 group-hover:-translate-y-1 transition-all duration-300 whitespace-nowrap z-20">
+              {tool.name} // {tool.category}
+            </div>
+
             <span className="logo-mark w-10 h-10 flex items-center justify-center text-[var(--color-accent)] transform group-hover:scale-110 group-hover:drop-shadow-[0_0_8px_rgba(216,209,194,0.3)] transition-all duration-300">
               <TechLogo id={tool.logo} />
             </span>
@@ -419,8 +425,9 @@ export default function TechStack({
       className="relative border-b hairline bg-[#050608] section-space overflow-hidden"
       aria-label="Technology Stack Section"
     >
-      {/* Background Particles backdrop */}
+      {/* Background Particles and Flowing Lines backdrop */}
       <ParticleEmitter />
+      <FlowingLines />
 
       <div className="site-shell relative z-10">
         <div className="editorial-grid mb-14 md:mb-20">

@@ -36,7 +36,7 @@ const projectsData: CaseStudyData[] = [
     results: "Deployed in 5 high-traffic retail spaces. Reached 94% precision on shoplifting alerts, and decreased total false alarm logs by 89%, saving security operators hours of manual review.",
     lessonsLearned: "Telemetry is vital: real-time GPU/CPU resource dashboards saved countless debugging hours during deployment. Clean and diverse Re-ID data is the primary bottleneck for multi-camera tracking stability.",
     techStack: ["YOLOv10", "DeepSORT", "PyTorch", "GStreamer", "FastAPI", "PostgreSQL"],
-    color: "rgba(34, 197, 94, 0.05)", // Deep subtle green theme
+    color: "rgba(34, 197, 94, 0.05)", // Subtle Green
     github: "https://github.com/miralhsn/SecureVision",
     demo: "https://github.com/miralhsn"
   },
@@ -68,7 +68,7 @@ const projectsData: CaseStudyData[] = [
     results: "Reduced average developer review cycles by 35% across integrated repositories. Achieved a 92% security anomaly detection precision rate. Logged a 0% JSON structural parser error rate.",
     lessonsLearned: "Strict parsing schema structures are mandatory for production LLM integrations. LLMs must be fed localized AST trees, not raw file text, to avoid context-token bloat and hallucination patterns.",
     techStack: ["GPT-4", "LangChain", "FastAPI", "Pydantic", "Redis", "GitHub API"],
-    color: "rgba(59, 130, 246, 0.05)", // Deep subtle blue theme
+    color: "rgba(59, 130, 246, 0.05)", // Subtle Blue
     github: "https://github.com/miralhsn/AI-Code-Reviewer",
     demo: "https://github.com/miralhsn"
   },
@@ -101,8 +101,38 @@ const projectsData: CaseStudyData[] = [
     results: "Delivers query answers with <800ms total latency. Achieved an NDCG@10 rank score of 0.89. Increased corporate search success rates by 87% compared to historical BM25 databases.",
     lessonsLearned: "Hybrid retrieval is mandatory for robust production search. Embedding models must be periodically fine-tuned or augmented with custom domain synonym dictionaries to capture industry-specific vocabulary.",
     techStack: ["FAISS", "OpenAI", "LangChain", "FastAPI", "Next.js", "Redis"],
-    color: "rgba(234, 179, 8, 0.04)", // Deep subtle bronze/yellow theme
+    color: "rgba(234, 179, 8, 0.04)", // Subtle Bronze
     github: "https://github.com/miralhsn/Semantic-Search",
+    demo: "https://github.com/miralhsn"
+  },
+  {
+    id: "explainable-ai",
+    name: "Explainable AI Engine",
+    tagline: "Visualizing complex model prediction features.",
+    status: "Active",
+    shortDescription: "An inference explanation engine rendering SHAP and LIME values as interactive visual dependency trees and feature maps.",
+    description: "Explainable AI System provides real-time explanations for deep neural networks, computing feature attributions and rendering visual logic flow diagram decision paths.",
+    problem: "Black-box AI models make critical decisions in medical, financial, and security domains without audit trails, leading to compliance failures, hidden biases, and difficulty debugging silent model degradation.",
+    solution: "Developed a distributed feature attribution service running SHAP kernel estimators and LIME locally. Wrapped outputs in responsive D3.js force-directed graphs and decision trees for human-in-the-loop review.",
+    architecture: [
+      { step: "Compute", detail: "Calculate SHAP/LIME attribution vectors on GPU during batch inference" },
+      { step: "Map", detail: "Generate local explanation graphs representing feature weights" },
+      { step: "Verify", detail: "Run counterfactual consistency tests on local models" },
+      { step: "Render", detail: "Visualize feature dependency trees dynamically in client UI dashboard" }
+    ],
+    workflow: [
+      { title: "Model Inference Log", description: "Captures inputs and predictions from deep tabular/neural models." },
+      { title: "Attribution Generator", description: "Runs background workers calculating cooperative game theory Shapley values." },
+      { title: "Decision Tree Builder", description: "Extracts decision node bounds and builds hierarchical JSON structures." },
+      { title: "D3 Visualizer Engine", description: "Maps nodes to relative screen positions with interactive drag and zoom settings." }
+    ],
+    technicalDecisions: "Selected local SHAP calculations on server clusters over cloud APIs to maintain strict compliance data privacy boundaries. Implemented custom D3 layouts for smooth graph nodes rendering compared to static images.",
+    challenges: "Reducing computational costs of Shapley kernel iterations to achieve <1.2s explanation limits. Managing nested JSON representations for multi-depth decision paths. Rendering thousands of chart elements without frame drops.",
+    results: "De-obfuscated credit risk models for 3 enterprise client systems. Reduced model debugging cycles by 48%. Met regulatory audit criteria with 100% compliance transparency logs.",
+    lessonsLearned: "Explainability should be integrated at training time, not just post-hoc. Background cache keys for identical input attributions saves 80% redundant CPU compute overloads.",
+    techStack: ["SHAP", "LIME", "Python", "FastAPI", "React", "D3.js"],
+    color: "rgba(168, 85, 247, 0.04)", // Subtle Purple
+    github: "https://github.com/miralhsn/Explainable-AI",
     demo: "https://github.com/miralhsn"
   }
 ];
@@ -111,17 +141,21 @@ function CardSchematic({ type }: { type: string }) {
   if (type === "securevision") {
     return (
       <svg className="w-full h-full text-[#d8d1c2]/20" viewBox="0 0 200 150" fill="none">
+        {/* Cam grids and scanning laser */}
         <rect x="10" y="10" width="80" height="60" rx="3" stroke="currentColor" strokeWidth="1" strokeDasharray="2 2" />
         <rect x="110" y="10" width="80" height="60" rx="3" stroke="currentColor" strokeWidth="1" strokeDasharray="2 2" />
         <rect x="10" y="80" width="80" height="60" rx="3" stroke="currentColor" strokeWidth="1" strokeDasharray="2 2" />
         <rect x="110" y="80" width="80" height="60" rx="3" stroke="currentColor" strokeWidth="1" strokeDasharray="2 2" />
-        <circle cx="50" cy="40" r="6" stroke="#d8d1c2" strokeWidth="1" className="animate-pulse" />
+
+        {/* Dynamic scan line */}
+        <line x1="10" y1="40" x2="190" y2="40" stroke="#22c55e" strokeWidth="1.5" className="animate-pulse" />
+        
+        {/* Targets */}
+        <circle cx="50" cy="40" r="8" stroke="#22c55e" strokeWidth="1" />
         <path d="M50 25 V55 M35 40 H65" stroke="currentColor" strokeWidth="0.5" />
-        <text x="60" y="35" fill="currentColor" className="text-[6px] font-mono">TRACK_ID: 981</text>
-        <text x="60" y="45" fill="#22c55e" className="text-[6px] font-mono">CONF: 98.4%</text>
-        <rect x="130" y="25" width="40" height="30" stroke="#d8d1c2" strokeWidth="1" />
-        <line x1="130" y1="25" x2="115" y2="15" stroke="currentColor" strokeWidth="0.5" />
-        <text x="133" y="38" fill="currentColor" className="text-[5px] font-mono">YOLO: PERSON</text>
+        <rect x="130" y="25" width="40" height="30" stroke="#22c55e" strokeWidth="1" />
+        <text x="63" y="36" fill="#22c55e" className="text-[5px] font-mono">OBJECT_LOCKED</text>
+        <text x="133" y="38" fill="currentColor" className="text-[5px] font-mono">YOLO: INCIDENT</text>
       </svg>
     );
   }
@@ -129,37 +163,90 @@ function CardSchematic({ type }: { type: string }) {
   if (type === "code-reviewer") {
     return (
       <svg className="w-full h-full text-[#d8d1c2]/20" viewBox="0 0 200 150" fill="none">
-        <circle cx="100" cy="20" r="8" stroke="currentColor" strokeWidth="1.5" />
-        <text x="96" y="23" fill="currentColor" className="text-[8px] font-bold font-mono">R</text>
-        <line x1="100" y1="28" x2="60" y2="60" stroke="currentColor" strokeWidth="1" />
-        <line x1="100" y1="28" x2="140" y2="60" stroke="currentColor" strokeWidth="1" />
-        <circle cx="60" cy="68" r="8" stroke="currentColor" strokeWidth="1" />
-        <circle cx="140" cy="68" r="8" stroke="#d8d1c2" strokeWidth="1.5" />
-        <line x1="60" y1="76" x2="30" y2="110" stroke="currentColor" strokeWidth="0.5" />
-        <line x1="60" y1="76" x2="90" y2="110" stroke="currentColor" strokeWidth="0.5" />
-        <circle cx="30" cy="118" r="6" stroke="currentColor" strokeWidth="1" />
-        <circle cx="90" cy="118" r="6" stroke="currentColor" strokeWidth="1" />
-        <text x="130" y="100" fill="#3b82f6" className="text-[6px] font-mono">JSON_SCHEMA: MATCH</text>
-        <rect x="125" y="105" width="60" height="20" rx="2" stroke="currentColor" strokeWidth="0.5" />
-        <text x="130" y="117" fill="currentColor" className="text-[5px] font-mono">Pydantic validation</text>
+        {/* Terminal interface with scrolling abstract code logs */}
+        <rect x="10" y="10" width="180" height="130" rx="5" stroke="currentColor" strokeWidth="1" fill="black" fillOpacity="0.2" />
+        <circle cx="20" cy="20" r="3" fill="#ef4444" />
+        <circle cx="30" cy="20" r="3" fill="#eab308" />
+        <circle cx="40" cy="20" r="3" fill="#22c55e" />
+
+        <text x="20" y="45" fill="#3b82f6" className="text-[6px] font-mono">&gt; git diff HEAD~1</text>
+        <text x="20" y="60" fill="#ef4444" className="text-[6px] font-mono">-  def verify_jwt(token):</text>
+        <text x="20" y="72" fill="#22c55e" className="text-[6px] font-mono">+  def verify_jwt_secure(token):</text>
+        <text x="20" y="84" fill="currentColor" className="text-[6px] font-mono">      payload = jwt.decode(token, secret)</text>
+        <text x="20" y="100" fill="#eab308" className="text-[6px] font-mono">CRITICAL: Unsecure decode check detected.</text>
+        <text x="20" y="115" fill="#3b82f6" className="text-[6px] font-mono">SUGGESTION: Set verify=True option.</text>
+
+        {/* Cursor blink */}
+        <rect x="160" y="108" width="5" height="10" fill="currentColor" className="animate-pulse" />
       </svg>
     );
   }
 
+  if (type === "semantic-search") {
+    return (
+      <svg className="w-full h-full text-[#d8d1c2]/20" viewBox="0 0 200 150" fill="none">
+        {/* Neural Network flowing nodes */}
+        {/* Layer 1 Nodes */}
+        <circle cx="30" cy="40" r="5" stroke="currentColor" strokeWidth="1" fill="#050608" />
+        <circle cx="30" cy="75" r="5" stroke="currentColor" strokeWidth="1" fill="#050608" />
+        <circle cx="30" cy="110" r="5" stroke="currentColor" strokeWidth="1" fill="#050608" />
+
+        {/* Layer 2 Nodes */}
+        <circle cx="100" cy="40" r="5" stroke="#3b82f6" strokeWidth="1.5" fill="#050608" />
+        <circle cx="100" cy="75" r="5" stroke="#3b82f6" strokeWidth="1.5" fill="#050608" />
+        <circle cx="100" cy="110" r="5" stroke="#3b82f6" strokeWidth="1.5" fill="#050608" />
+
+        {/* Layer 3 Nodes */}
+        <circle cx="170" cy="55" r="5" stroke="currentColor" strokeWidth="1" fill="#050608" />
+        <circle cx="170" cy="95" r="5" stroke="currentColor" strokeWidth="1" fill="#050608" />
+
+        {/* Connections with flow animation */}
+        <line x1="35" y1="40" x2="95" y2="40" stroke="currentColor" strokeWidth="0.5" strokeDasharray="3 3" />
+        <line x1="35" y1="40" x2="95" y2="75" stroke="currentColor" strokeWidth="0.5" />
+        <line x1="35" y1="75" x2="95" y2="40" stroke="currentColor" strokeWidth="0.5" />
+        <line x1="35" y1="75" x2="95" y2="75" stroke="#3b82f6" strokeWidth="1" />
+        <line x1="35" y1="110" x2="95" y2="75" stroke="currentColor" strokeWidth="0.5" />
+        <line x1="35" y1="110" x2="95" y2="110" stroke="currentColor" strokeWidth="0.5" />
+
+        <line x1="105" y1="40" x2="165" y2="55" stroke="currentColor" strokeWidth="0.5" />
+        <line x1="105" y1="75" x2="165" y2="55" stroke="#3b82f6" strokeWidth="1.5" />
+        <line x1="105" y1="75" x2="165" y2="95" stroke="currentColor" strokeWidth="0.5" />
+        <line x1="105" y1="110" x2="165" y2="95" stroke="currentColor" strokeWidth="0.5" />
+
+        <text x="108" y="32" fill="#3b82f6" className="text-[5px] font-mono animate-pulse">EMBEDDING_MATCH</text>
+      </svg>
+    );
+  }
+
+  // explainable-ai
   return (
     <svg className="w-full h-full text-[#d8d1c2]/20" viewBox="0 0 200 150" fill="none">
-      <circle cx="40" cy="40" r="1.5" fill="currentColor" />
-      <circle cx="50" cy="30" r="1.5" fill="currentColor" />
-      <circle cx="35" cy="55" r="1.5" fill="currentColor" />
-      <circle cx="70" cy="45" r="1.5" fill="currentColor" />
-      <circle cx="150" cy="110" r="1.5" fill="currentColor" />
-      <circle cx="160" cy="100" r="1.5" fill="currentColor" />
-      <circle cx="140" cy="120" r="1.5" fill="currentColor" />
-      <path d="M45 42 C 70 80, 110 80, 150 105" stroke="#d8d1c2" strokeWidth="1" strokeDasharray="3 3" />
-      <path d="M150 105 L142 105 M150 105 L150 97" stroke="#d8d1c2" strokeWidth="1" />
-      <circle cx="95" cy="75" r="14" stroke="currentColor" strokeWidth="0.5" strokeDasharray="1 1" />
-      <text x="105" y="65" fill="currentColor" className="text-[5px] font-mono">FAISS ANN LIST</text>
-      <text x="80" y="140" fill="currentColor" className="text-[6px] font-mono">RRF Similarity: 0.892</text>
+      {/* Decision tree node mapping & SHAP attribution bar charts */}
+      {/* Decison tree lines */}
+      <circle cx="100" cy="25" r="4" stroke="#a855f7" strokeWidth="1.5" />
+      <line x1="97" y1="28" x2="60" y2="55" stroke="currentColor" strokeWidth="0.75" />
+      <line x1="103" y1="28" x2="140" y2="55" stroke="currentColor" strokeWidth="0.75" />
+
+      <circle cx="60" cy="58" r="4" stroke="currentColor" strokeWidth="1" />
+      <circle cx="140" cy="58" r="4" stroke="currentColor" strokeWidth="1" />
+
+      <line x1="60" y1="62" x2="40" y2="85" stroke="currentColor" strokeWidth="0.5" />
+      <line x1="60" y1="62" x2="80" y2="85" stroke="currentColor" strokeWidth="0.5" />
+
+      <circle cx="40" cy="88" r="3" stroke="currentColor" strokeWidth="1" />
+      <circle cx="80" cy="88" r="3" stroke="currentColor" strokeWidth="1" />
+
+      {/* SHAP attributions bar chart */}
+      <text x="110" y="90" fill="#a855f7" className="text-[5px] font-mono font-bold">SHAP ATTRIBUTION</text>
+      
+      <rect x="110" y="98" width="50" height="4" fill="rgba(34,197,94,0.3)" />
+      <text x="165" y="102" fill="#22c55e" className="text-[4px] font-mono">+0.24 (Age)</text>
+
+      <rect x="110" y="106" width="30" height="4" fill="rgba(239,68,68,0.3)" />
+      <text x="145" y="110" fill="#ef4444" className="text-[4px] font-mono">-0.15 (Income)</text>
+
+      <rect x="110" y="114" width="40" height="4" fill="rgba(34,197,94,0.3)" />
+      <text x="155" y="118" fill="#22c55e" className="text-[4px] font-mono">+0.18 (Debt)</text>
     </svg>
   );
 }
@@ -206,18 +293,32 @@ function ProjectCard({
       animate={{
         scale: isActive ? 1.03 : 0.94,
         opacity: isActive ? 1 : 0.45,
+        y: [0, -8, 0], // Continuous floating wave oscillation
       }}
-      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      transition={{
+        scale: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
+        opacity: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
+        y: { duration: 5, ease: "easeInOut", repeat: Infinity, delay: index * 0.4 } // Float oscillation
+      }}
       className={`relative flex flex-col justify-between shrink-0 w-[82vw] sm:w-[45vw] lg:w-[28vw] aspect-[3/4.2] border hairline bg-[var(--color-bg-soft)] p-6 select-none cursor-none snap-center overflow-hidden group`}
       data-cursor="VIEW"
     >
       <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent pointer-events-none" />
 
+      {/* Dynamic Background Glow */}
       <div 
         className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none blur-[40px] -z-10"
         style={{
-          background: `radial-gradient(circle at 50% 50%, ${project.color === "rgba(34, 197, 94, 0.05)" ? "#22c55e" : project.color === "rgba(59, 130, 246, 0.05)" ? "#3b82f6" : "#eab308"} 0%, transparent 60%)`,
-          opacity: 0.12
+          background: `radial-gradient(circle at 50% 50%, ${
+            project.id === "securevision"
+              ? "#22c55e"
+              : project.id === "code-reviewer"
+              ? "#3b82f6"
+              : project.id === "semantic-search"
+              ? "#eab308"
+              : "#a855f7"
+          } 0%, transparent 60%)`,
+          opacity: 0.14
         }}
       />
 
@@ -237,7 +338,8 @@ function ProjectCard({
         </div>
       </div>
 
-      <div className="flex-1 my-6 flex items-center justify-center overflow-hidden border border-white/5 bg-black/20 rounded p-4 relative">
+      {/* Schematic drawing */}
+      <div className="flex-1 my-6 flex items-center justify-center overflow-hidden border border-white/5 bg-black/25 rounded p-4 relative">
         <div className="w-full h-full transform group-hover:scale-105 transition-transform duration-500">
           <CardSchematic type={project.id} />
         </div>
@@ -280,10 +382,10 @@ export default function Projects({ activeCapability }: { activeCapability: strin
           return p.techStack.some((t) => ["GPT-4", "LangChain", "OpenAI", "FAISS"].includes(t));
         }
         if (activeCapability === "Backend") {
-          return p.techStack.some((t) => ["FastAPI", "Redis", "PostgreSQL", "GStreamer"].includes(t));
+          return p.techStack.some((t) => ["FastAPI", "Redis", "PostgreSQL", "GStreamer", "Python"].includes(t));
         }
         if (activeCapability === "Frontend") {
-          return p.techStack.some((t) => ["Next.js"].includes(t));
+          return p.techStack.some((t) => ["Next.js", "React", "D3.js"].includes(t));
         }
         if (activeCapability === "Cloud") {
           return p.techStack.some((t) => ["GitHub API", "FastAPI"].includes(t));
@@ -328,7 +430,6 @@ export default function Projects({ activeCapability }: { activeCapability: strin
     setActiveIndex(closestIndex);
   };
 
-  // Reset activeIndex and scroll when filter changes
   useEffect(() => {
     setActiveIndex(0);
     const container = scrollContainerRef.current;
@@ -355,6 +456,10 @@ export default function Projects({ activeCapability }: { activeCapability: strin
     >
       <TechnicalGrid />
 
+      {/* Smooth blend overlays */}
+      <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-[#050608] to-transparent pointer-events-none z-10" />
+      <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#050608] to-transparent pointer-events-none z-10" />
+
       <div className="site-shell mb-10">
         <div className="editorial-grid">
           <div className="col-span-12 md:col-span-4">
@@ -365,8 +470,8 @@ export default function Projects({ activeCapability }: { activeCapability: strin
           <div className="col-span-12 md:col-span-8">
             <HeadlineReveal
               lines={[
-                <span key="production">Shipped AI</span>,
-                <span key="implementations">Architectures{activeCapability ? ` / ${activeCapability}` : ""}<span className="text-accent">.</span></span>,
+                <span key="production">Featured</span>,
+                <span key="implementations">Systems{activeCapability ? ` / ${activeCapability}` : ""}<span className="text-accent">.</span></span>,
               ]}
             />
           </div>
@@ -393,7 +498,7 @@ export default function Projects({ activeCapability }: { activeCapability: strin
           </div>
         ) : (
           <div className="text-center py-20 text-[var(--color-dim)] font-mono text-sm">
-            NO_PROJECTS_FOUND_MATCHING_SELECTED_CAPABILITY
+            NO_SYSTEMS_FOUND_MATCHING_SELECTED_CAPABILITY
           </div>
         )}
 

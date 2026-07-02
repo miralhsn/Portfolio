@@ -50,6 +50,10 @@ export default function Journey() {
       {/* Wave animation backdrop */}
       <FlowingLines />
 
+      {/* Smooth blend overlays */}
+      <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-[#050608] to-transparent pointer-events-none z-10" />
+      <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#090a0d] to-transparent pointer-events-none z-10" />
+
       <div className="site-shell relative z-10">
         <div className="editorial-grid mb-14 md:mb-20">
           <div className="col-span-12 md:col-span-4">

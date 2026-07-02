@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ArrowUpRight, Download } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const links = [
   { label: "About", href: "#about" },
   { label: "Systems", href: "#projects" },
-  { label: "Stack", href: "#stack" },
+  { label: "Technology", href: "#stack" },
   { label: "Journey", href: "#journey" },
   { label: "Contact", href: "#contact" },
 ];
@@ -30,7 +31,7 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 32);
+    const handleScroll = () => setScrolled(window.scrollY > 40);
     handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
@@ -46,73 +47,140 @@ export default function Navbar() {
   return (
     <>
       <header
-        className={`fixed left-0 right-0 top-0 z-50 border-b transition-colors duration-300 ${
-          scrolled ? "border-[var(--color-line)] bg-[rgba(5,6,8,0.88)]" : "border-transparent bg-transparent"
+        className={`fixed left-1/2 -translate-x-1/2 z-50 w-[92%] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          scrolled
+            ? "top-3 max-w-5xl rounded-full border border-white/10 bg-black/45 backdrop-blur-md py-3 px-6 shadow-[0_12px_40px_rgba(0,0,0,0.4)]"
+            : "top-6 max-w-7xl rounded-2xl border border-white/5 bg-transparent py-4 px-8"
         }`}
       >
-        <nav className="site-shell grid h-20 grid-cols-[1fr_auto_1fr] items-center">
+        <nav className="flex items-center justify-between gap-6">
+          {/* Left: Brand Monogram */}
           <a
             href="#"
             aria-label="Home"
             data-cursor="OPEN"
-            className="focus-ring flex w-fit items-center gap-2 text-sm font-extrabold tracking-tight text-[var(--color-text)]"
+            className="focus-ring flex items-center gap-1.5 text-sm font-extrabold tracking-tight text-white select-none"
           >
             <span>MH</span>
-            <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-accent)]" />
+            <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-accent)] animate-pulse" />
           </a>
 
-          <div className="hidden items-center justify-center gap-8 md:flex">
+          {/* Center Links (Hidden on Tablet/Mobile) */}
+          <div className="hidden lg:flex items-center justify-center gap-8">
             {links.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
                 data-cursor="OPEN"
-                className="focus-ring group relative text-xs font-bold text-muted transition-colors duration-200 hover:text-[var(--color-text)]"
+                className="focus-ring group relative text-xs font-bold uppercase tracking-wider text-[var(--color-dim)] transition-colors duration-200 hover:text-white"
               >
                 <span>{link.label}</span>
-                <span className="absolute -bottom-2 left-0 h-px w-full origin-left scale-x-0 bg-[var(--color-accent)] transition-transform duration-200 group-hover:scale-x-100" />
+                <span className="absolute -bottom-1.5 left-0 h-[1.5px] w-full origin-left scale-x-0 bg-[var(--color-accent)] transition-transform duration-200 group-hover:scale-x-100" />
               </a>
             ))}
           </div>
 
-          <div className="hidden justify-self-end md:block">
-            <div className="min-w-[76px] text-right text-xs font-bold tabular-nums text-dim">
+          {/* Right: Info Cluster (Status, Clock, Resume) */}
+          <div className="hidden md:flex items-center gap-6">
+            {/* Availability status indicator */}
+            <div className="flex items-center gap-2">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+              </span>
+              <span className="text-[10px] font-mono font-bold tracking-widest text-green-400 uppercase">
+                Available
+              </span>
+            </div>
+
+            {/* Separator line */}
+            <span className="h-4 w-px bg-white/10" />
+
+            {/* Time */}
+            <div className="min-w-[64px] text-left text-xs font-mono font-bold tabular-nums text-[var(--color-dim)] select-none">
               {time || "00:00:00"}
             </div>
+
+            {/* Resume button */}
+            <a
+              href="/resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="focus-ring flex items-center gap-2 bg-white/5 border border-white/10 px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider text-white transition-all hover:bg-white/10 hover:border-white/20"
+            >
+              <span>Resume</span>
+              <Download size={10} strokeWidth={2.5} />
+            </a>
           </div>
 
+          {/* Mobile Menu Trigger */}
           <button
             type="button"
             onClick={() => setOpen(!open)}
             aria-label="Toggle menu"
             data-cursor="OPEN"
-            className="focus-ring col-start-3 flex h-10 w-10 items-center justify-center justify-self-end border hairline text-[var(--color-text)] md:hidden"
+            className="focus-ring flex h-9 w-9 items-center justify-center border border-white/10 rounded-full text-white hover:bg-white/5 lg:hidden"
           >
-            {open ? <X size={18} strokeWidth={1.8} /> : <Menu size={18} strokeWidth={1.8} />}
+            {open ? <X size={15} strokeWidth={2} /> : <Menu size={15} strokeWidth={2} />}
           </button>
         </nav>
       </header>
 
-      {open && (
-        <div className="fixed inset-0 z-40 bg-[var(--color-bg)] px-[var(--grid-margin)] pb-10 pt-28 md:hidden">
-          <div className="flex flex-col border-t hairline">
-            {links.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                onClick={() => setOpen(false)}
-                className="border-b hairline py-5 text-4xl font-normal text-[var(--color-text)]"
-              >
-                {link.label}
-              </a>
-            ))}
-          </div>
+      {/* Mobile navigation full-screen overlay */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+            className="fixed inset-0 z-40 bg-[#050608] flex flex-col justify-between px-6 pb-12 pt-28 lg:hidden"
+          >
+            {/* Center nav links */}
+            <div className="flex flex-col border-t border-white/5">
+              {links.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setOpen(false)}
+                  className="border-b border-white/5 py-5 text-3xl font-medium tracking-tight text-white hover:text-[var(--color-accent)] transition-colors"
+                >
+                  {link.label}
+                </a>
+              ))}
+            </div>
 
-          <div className="mt-auto flex items-center justify-end border-t hairline pt-6 text-xs font-bold text-muted">
-            <div>{time || "00:00:00"}</div>
-          </div>
-        </div>
-      )}
+            {/* Bottom info cards */}
+            <div className="flex flex-col gap-6 border-t border-white/5 pt-8">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                  </span>
+                  <span className="text-[10px] font-mono font-bold tracking-widest text-green-400 uppercase">
+                    Available
+                  </span>
+                </div>
+                <div className="text-xs font-mono font-bold text-[var(--color-dim)]">
+                  {time || "00:00:00"}
+                </div>
+              </div>
+
+              <a
+                href="/resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setOpen(false)}
+                className="flex items-center justify-center gap-2.5 bg-[var(--color-accent)] py-3 px-6 rounded-full text-xs font-bold uppercase tracking-wider text-[var(--color-accent-ink)]"
+              >
+                <span>Download Resume</span>
+                <Download size={12} strokeWidth={2.5} />
+              </a>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }
