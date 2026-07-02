@@ -1,9 +1,14 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useState } from "react";
+import dynamic from "next/dynamic";
 import { ArrowUpRight, Terminal } from "lucide-react";
 import HeadlineReveal from "@/components/motion/HeadlineReveal";
 import { SlideOverCaseStudy, type CaseStudyData } from "@/components/SlideOverCaseStudy";
+
+const CurvedProjectCarousel = dynamic(() => import("@/components/sections/CurvedProjectCarousel"), {
+  ssr: false,
+});
 
 const projectsData: CaseStudyData[] = [
   {
@@ -217,45 +222,11 @@ function ProjectRow({
 
 export default function Projects() {
   const [selectedProject, setSelectedProject] = useState<CaseStudyData | null>(null);
-  const [activeProject, setActiveProject] = useState<CaseStudyData | null>(null);
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [previewVisible, setPreviewVisible] = useState(false);
-  const [previewPosition, setPreviewPosition] = useState({ x: 0, y: 0 });
-  const previewProject = activeProject ?? projectsData[0];
-
-  const updatePreviewPosition = useCallback((e: React.MouseEvent) => {
-    const width = 432;
-    const height = 380;
-    const x = Math.min(Math.max(e.clientX + 28, 24), window.innerWidth - width - 24);
-    const y = Math.min(Math.max(e.clientY - height / 2, 24), window.innerHeight - height - 24);
-    setPreviewPosition({ x, y });
-  }, []);
-
-  const handleHoverStart = useCallback(
-    (project: CaseStudyData, index: number, e: React.MouseEvent) => {
-      setActiveProject(project);
-      setActiveIndex(index);
-      setPreviewVisible(true);
-      updatePreviewPosition(e);
-    },
-    [updatePreviewPosition],
-  );
-
-  const handleHoverMove = useCallback(
-    (e: React.MouseEvent) => {
-      updatePreviewPosition(e);
-    },
-    [updatePreviewPosition],
-  );
-
-  const handleHoverEnd = useCallback(() => {
-    setPreviewVisible(false);
-  }, []);
 
   return (
     <section
       id="projects"
-      className="relative border-b hairline bg-[var(--color-bg)] section-space"
+      className="relative overflow-hidden border-b hairline bg-[var(--color-bg)] pt-[var(--section-space)]"
       aria-label="Projects Section"
     >
       <div className="site-shell">
@@ -275,28 +246,11 @@ export default function Projects() {
           </div>
         </div>
 
-        <div className="border-b hairline">
-          {projectsData.map((project, idx) => (
-            <ProjectRow
-              key={project.id}
-              project={project}
-              index={idx}
-              onClick={() => setSelectedProject(project)}
-              onHoverStart={handleHoverStart}
-              onHoverMove={handleHoverMove}
-              onHoverEnd={handleHoverEnd}
-              active={activeProject?.id === project.id}
-              dimmed={activeProject !== null && previewVisible}
-            />
-          ))}
-        </div>
       </div>
 
-      <ProjectPreview
-        project={previewProject}
-        index={activeIndex}
-        position={previewPosition}
-        visible={previewVisible}
+      <CurvedProjectCarousel
+        projects={projectsData}
+        onSelect={setSelectedProject}
       />
 
       <SlideOverCaseStudy

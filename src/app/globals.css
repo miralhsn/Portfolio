@@ -288,6 +288,45 @@ button {
     line-height: 1;
     text-transform: uppercase;
   }
+
+  .project-carousel-shell {
+    position: relative;
+    width: 100%;
+    height: 100svh;
+    min-height: 680px;
+    overflow: hidden;
+    border-top: 1px solid var(--color-line);
+    background:
+      linear-gradient(90deg, var(--color-bg) 0%, rgba(5, 6, 8, 0) 18%, rgba(5, 6, 8, 0) 82%, var(--color-bg) 100%),
+      linear-gradient(180deg, var(--color-bg) 0%, var(--color-bg-soft) 42%, var(--color-bg) 100%);
+    touch-action: pan-y;
+  }
+
+  .project-carousel-shell::before,
+  .project-carousel-shell::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    z-index: 2;
+    height: 22%;
+    pointer-events: none;
+  }
+
+  .project-carousel-shell::before {
+    top: 0;
+    background: linear-gradient(180deg, var(--color-bg), rgba(5, 6, 8, 0));
+  }
+
+  .project-carousel-shell::after {
+    bottom: 0;
+    background: linear-gradient(0deg, var(--color-bg), rgba(5, 6, 8, 0));
+  }
+
+  .project-carousel-shell canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
 }
 
 @keyframes logo-marquee {
@@ -297,6 +336,15 @@ button {
 
   to {
     transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@media (max-width: 760px) {
+  @layer utilities {
+    .project-carousel-shell {
+      height: 82svh;
+      min-height: 560px;
+    }
   }
 }
 
