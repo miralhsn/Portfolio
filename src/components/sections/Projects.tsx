@@ -36,7 +36,7 @@ const projectsData: CaseStudyData[] = [
     results: "Deployed in 5 high-traffic retail spaces. Reached 94% precision on shoplifting alerts, and decreased total false alarm logs by 89%, saving security operators hours of manual review.",
     lessonsLearned: "Telemetry is vital: real-time GPU/CPU resource dashboards saved countless debugging hours during deployment. Clean and diverse Re-ID data is the primary bottleneck for multi-camera tracking stability.",
     techStack: ["YOLOv10", "DeepSORT", "PyTorch", "GStreamer", "FastAPI", "PostgreSQL"],
-    color: "rgba(34, 197, 94, 0.05)", // Subtle Green
+    color: "rgba(34, 197, 94, 0.04)", // Subtle Green
     github: "https://github.com/miralhsn/SecureVision",
     demo: "https://github.com/miralhsn"
   },
@@ -68,7 +68,7 @@ const projectsData: CaseStudyData[] = [
     results: "Reduced average developer review cycles by 35% across integrated repositories. Achieved a 92% security anomaly detection precision rate. Logged a 0% JSON structural parser error rate.",
     lessonsLearned: "Strict parsing schema structures are mandatory for production LLM integrations. LLMs must be fed localized AST trees, not raw file text, to avoid context-token bloat and hallucination patterns.",
     techStack: ["GPT-4", "LangChain", "FastAPI", "Pydantic", "Redis", "GitHub API"],
-    color: "rgba(59, 130, 246, 0.05)", // Subtle Blue
+    color: "rgba(59, 130, 246, 0.04)", // Subtle Blue
     github: "https://github.com/miralhsn/AI-Code-Reviewer",
     demo: "https://github.com/miralhsn"
   },
@@ -101,7 +101,7 @@ const projectsData: CaseStudyData[] = [
     results: "Delivers query answers with <800ms total latency. Achieved an NDCG@10 rank score of 0.89. Increased corporate search success rates by 87% compared to historical BM25 databases.",
     lessonsLearned: "Hybrid retrieval is mandatory for robust production search. Embedding models must be periodically fine-tuned or augmented with custom domain synonym dictionaries to capture industry-specific vocabulary.",
     techStack: ["FAISS", "OpenAI", "LangChain", "FastAPI", "Next.js", "Redis"],
-    color: "rgba(234, 179, 8, 0.04)", // Subtle Bronze
+    color: "rgba(234, 179, 8, 0.03)", // Subtle Bronze
     github: "https://github.com/miralhsn/Semantic-Search",
     demo: "https://github.com/miralhsn"
   },
@@ -131,7 +131,7 @@ const projectsData: CaseStudyData[] = [
     results: "De-obfuscated credit risk models for 3 enterprise client systems. Reduced model debugging cycles by 48%. Met regulatory audit criteria with 100% compliance transparency logs.",
     lessonsLearned: "Explainability should be integrated at training time, not just post-hoc. Background cache keys for identical input attributions saves 80% redundant CPU compute overloads.",
     techStack: ["SHAP", "LIME", "Python", "FastAPI", "React", "D3.js"],
-    color: "rgba(168, 85, 247, 0.04)", // Subtle Purple
+    color: "rgba(168, 85, 247, 0.03)", // Subtle Purple
     github: "https://github.com/miralhsn/Explainable-AI",
     demo: "https://github.com/miralhsn"
   }
@@ -140,114 +140,168 @@ const projectsData: CaseStudyData[] = [
 function CardSchematic({ type }: { type: string }) {
   if (type === "securevision") {
     return (
-      <svg className="w-full h-full text-[#d8d1c2]/20" viewBox="0 0 200 150" fill="none">
-        {/* Cam grids and scanning laser */}
-        <rect x="10" y="10" width="80" height="60" rx="3" stroke="currentColor" strokeWidth="1" strokeDasharray="2 2" />
-        <rect x="110" y="10" width="80" height="60" rx="3" stroke="currentColor" strokeWidth="1" strokeDasharray="2 2" />
-        <rect x="10" y="80" width="80" height="60" rx="3" stroke="currentColor" strokeWidth="1" strokeDasharray="2 2" />
-        <rect x="110" y="80" width="80" height="60" rx="3" stroke="currentColor" strokeWidth="1" strokeDasharray="2 2" />
-
-        {/* Dynamic scan line */}
-        <line x1="10" y1="40" x2="190" y2="40" stroke="#22c55e" strokeWidth="1.5" className="animate-pulse" />
+      <div className="relative w-full h-full overflow-hidden">
+        {/* Cam grids overlay */}
+        <div className="absolute inset-0 bg-[radial-gradient(rgba(34,197,94,0.06)_1.5px,transparent_1.5px)] bg-[size:12px_12px]" />
         
-        {/* Targets */}
-        <circle cx="50" cy="40" r="8" stroke="#22c55e" strokeWidth="1" />
-        <path d="M50 25 V55 M35 40 H65" stroke="currentColor" strokeWidth="0.5" />
-        <rect x="130" y="25" width="40" height="30" stroke="#22c55e" strokeWidth="1" />
-        <text x="63" y="36" fill="#22c55e" className="text-[5px] font-mono">OBJECT_LOCKED</text>
-        <text x="133" y="38" fill="currentColor" className="text-[5px] font-mono">YOLO: INCIDENT</text>
-      </svg>
+        <svg className="w-full h-full text-green-500/10" viewBox="0 0 200 150" fill="none">
+          {/* Cameras Grid */}
+          <rect x="8" y="8" width="88" height="62" rx="4" stroke="currentColor" strokeWidth="1" strokeDasharray="3 3" />
+          <rect x="104" y="8" width="88" height="62" rx="4" stroke="currentColor" strokeWidth="1" strokeDasharray="3 3" />
+          <rect x="8" y="80" width="88" height="62" rx="4" stroke="currentColor" strokeWidth="1" strokeDasharray="3 3" />
+          <rect x="104" y="80" width="88" height="62" rx="4" stroke="currentColor" strokeWidth="1" strokeDasharray="3 3" />
+
+          {/* Bounding box brackets */}
+          <path d="M40,25 h8 V33 M80,25 h-8 V33 M40,55 h8 V47 M80,55 h-8 V47" stroke="#22c55e" strokeWidth="1.5" />
+          <circle cx="60" cy="40" r="5" stroke="#22c55e" strokeWidth="1.5" />
+
+          {/* Camera overlay text */}
+          <text x="14" y="20" fill="currentColor" className="text-[6px] font-mono font-bold uppercase">CAM_01 // INFERENCE</text>
+          <text x="14" y="28" fill="#22c55e" className="text-[6px] font-mono">OBJECT: SHOPPER_08</text>
+          
+          <rect x="120" y="20" width="56" height="38" rx="2" stroke="currentColor" strokeWidth="0.75" />
+          <text x="124" y="32" fill="#22c55e" className="text-[5px] font-mono">YOLO: BBOX</text>
+
+          {/* Blinking record light */}
+          <circle cx="180" cy="18" r="2.5" fill="#ef4444" className="animate-pulse" />
+          <text x="160" y="20" fill="#ef4444" className="text-[5.5px] font-mono font-bold">REC</text>
+
+          {/* Scrolling Scanning laser */}
+          <line x1="8" y1="0" x2="192" y2="0" stroke="#22c55e" strokeWidth="1.5" opacity="0.8">
+            <animate attributeName="y1" values="8;142;8" dur="5s" repeatCount="indefinite" />
+            <animate attributeName="y2" values="8;142;8" dur="5s" repeatCount="indefinite" />
+          </line>
+        </svg>
+      </div>
     );
   }
 
   if (type === "code-reviewer") {
     return (
-      <svg className="w-full h-full text-[#d8d1c2]/20" viewBox="0 0 200 150" fill="none">
-        {/* Terminal interface with scrolling abstract code logs */}
-        <rect x="10" y="10" width="180" height="130" rx="5" stroke="currentColor" strokeWidth="1" fill="black" fillOpacity="0.2" />
-        <circle cx="20" cy="20" r="3" fill="#ef4444" />
-        <circle cx="30" cy="20" r="3" fill="#eab308" />
-        <circle cx="40" cy="20" r="3" fill="#22c55e" />
+      <div className="relative w-full h-full overflow-hidden p-2 rounded bg-black/45 border border-white/5 font-mono text-[7px] text-white/40 flex flex-col justify-between">
+        {/* Terminal Header */}
+        <div className="flex justify-between items-center border-b border-white/5 pb-2 mb-2 select-none">
+          <div className="flex gap-1.5">
+            <span className="h-2 w-2 rounded-full bg-[#ef4444]" />
+            <span className="h-2 w-2 rounded-full bg-[#eab308]" />
+            <span className="h-2 w-2 rounded-full bg-[#22c55e]" />
+          </div>
+          <span className="text-[6px] text-white/20">AST_PARSER_IDE // Reviewer.tsx</span>
+        </div>
+        
+        {/* Animated Code Terminal */}
+        <div className="flex-1 space-y-2 select-none overflow-hidden relative">
+          <div className="text-blue-400">&gt; npx next lint --dir src</div>
+          
+          <div className="border-l border-red-500/40 pl-2 bg-red-500/5 py-1">
+            <div className="text-red-400 font-bold">LINT_WARN: UNUSED_DECLARATION</div>
+            <div>- const secret_key = process.env.JWT_SECRET;</div>
+          </div>
 
-        <text x="20" y="45" fill="#3b82f6" className="text-[6px] font-mono">&gt; git diff HEAD~1</text>
-        <text x="20" y="60" fill="#ef4444" className="text-[6px] font-mono">-  def verify_jwt(token):</text>
-        <text x="20" y="72" fill="#22c55e" className="text-[6px] font-mono">+  def verify_jwt_secure(token):</text>
-        <text x="20" y="84" fill="currentColor" className="text-[6px] font-mono">      payload = jwt.decode(token, secret)</text>
-        <text x="20" y="100" fill="#eab308" className="text-[6px] font-mono">CRITICAL: Unsecure decode check detected.</text>
-        <text x="20" y="115" fill="#3b82f6" className="text-[6px] font-mono">SUGGESTION: Set verify=True option.</text>
+          <div className="border-l border-green-500/40 pl-2 bg-green-500/5 py-1">
+            <div className="text-green-400 font-bold">AST_OPTIMIZE: SECURE_TOKEN</div>
+            <div>+ const secret_key = await load_kms_secret();</div>
+          </div>
 
-        {/* Cursor blink */}
-        <rect x="160" y="108" width="5" height="10" fill="currentColor" className="animate-pulse" />
-      </svg>
+          <div className="text-white/60">
+            <span>&gt; compiling modules</span>
+            <span className="inline-block w-1.5 h-3 ml-1 bg-white/60 align-middle animate-pulse" />
+          </div>
+        </div>
+      </div>
     );
   }
 
   if (type === "semantic-search") {
     return (
-      <svg className="w-full h-full text-[#d8d1c2]/20" viewBox="0 0 200 150" fill="none">
-        {/* Neural Network flowing nodes */}
-        {/* Layer 1 Nodes */}
-        <circle cx="30" cy="40" r="5" stroke="currentColor" strokeWidth="1" fill="#050608" />
-        <circle cx="30" cy="75" r="5" stroke="currentColor" strokeWidth="1" fill="#050608" />
-        <circle cx="30" cy="110" r="5" stroke="currentColor" strokeWidth="1" fill="#050608" />
+      <div className="relative w-full h-full overflow-hidden">
+        {/* Gradient Mesh overlay */}
+        <div className="absolute inset-0 bg-gradient-to-tr from-yellow-500/5 via-transparent to-transparent pointer-events-none" />
 
-        {/* Layer 2 Nodes */}
-        <circle cx="100" cy="40" r="5" stroke="#3b82f6" strokeWidth="1.5" fill="#050608" />
-        <circle cx="100" cy="75" r="5" stroke="#3b82f6" strokeWidth="1.5" fill="#050608" />
-        <circle cx="100" cy="110" r="5" stroke="#3b82f6" strokeWidth="1.5" fill="#050608" />
+        <svg className="w-full h-full text-yellow-500/10" viewBox="0 0 200 150" fill="none">
+          {/* Connecting lines */}
+          <g stroke="currentColor" strokeWidth="1">
+            {/* Input query node to cluster connectors */}
+            <path d="M20,75 L60,40" strokeDasharray="3 3" />
+            <path d="M20,75 L60,110" />
+            <path d="M60,40 L120,40" />
+            <path d="M60,40 L120,75" />
+            <path d="M60,110 L120,75" />
+            <path d="M60,110 L120,110" strokeDasharray="2 2" />
+            <path d="M120,75 L180,75" strokeWidth="1.5" stroke="#eab308" />
+          </g>
 
-        {/* Layer 3 Nodes */}
-        <circle cx="170" cy="55" r="5" stroke="currentColor" strokeWidth="1" fill="#050608" />
-        <circle cx="170" cy="95" r="5" stroke="currentColor" strokeWidth="1" fill="#050608" />
+          {/* Animated flowing particles along lines */}
+          <circle cx="20" cy="75" r="2.5" fill="#eab308">
+            <animateMotion dur="4s" repeatCount="indefinite" path="M20,75 L60,40 L120,75 L180,75" />
+          </circle>
+          <circle cx="20" cy="75" r="2.5" fill="currentColor">
+            <animateMotion dur="5.5s" repeatCount="indefinite" path="M20,75 L60,110 L120,75" />
+          </circle>
 
-        {/* Connections with flow animation */}
-        <line x1="35" y1="40" x2="95" y2="40" stroke="currentColor" strokeWidth="0.5" strokeDasharray="3 3" />
-        <line x1="35" y1="40" x2="95" y2="75" stroke="currentColor" strokeWidth="0.5" />
-        <line x1="35" y1="75" x2="95" y2="40" stroke="currentColor" strokeWidth="0.5" />
-        <line x1="35" y1="75" x2="95" y2="75" stroke="#3b82f6" strokeWidth="1" />
-        <line x1="35" y1="110" x2="95" y2="75" stroke="currentColor" strokeWidth="0.5" />
-        <line x1="35" y1="110" x2="95" y2="110" stroke="currentColor" strokeWidth="0.5" />
+          {/* Interactive nodes */}
+          <circle cx="20" cy="75" r="5.5" stroke="#eab308" strokeWidth="1.5" fill="#050608" />
+          <circle cx="60" cy="40" r="5" stroke="currentColor" strokeWidth="1" fill="#050608" />
+          <circle cx="60" cy="110" r="5" stroke="currentColor" strokeWidth="1" fill="#050608" />
+          <circle cx="120" cy="40" r="5" stroke="currentColor" strokeWidth="1" fill="#050608" />
+          <circle cx="120" cy="75" r="6" stroke="#eab308" strokeWidth="1.5" fill="#050608" />
+          <circle cx="120" cy="110" r="5" stroke="currentColor" strokeWidth="1" fill="#050608" />
+          <circle cx="180" cy="75" r="5.5" stroke="#eab308" strokeWidth="1.5" fill="#eab308" />
 
-        <line x1="105" y1="40" x2="165" y2="55" stroke="currentColor" strokeWidth="0.5" />
-        <line x1="105" y1="75" x2="165" y2="55" stroke="#3b82f6" strokeWidth="1.5" />
-        <line x1="105" y1="75" x2="165" y2="95" stroke="currentColor" strokeWidth="0.5" />
-        <line x1="105" y1="110" x2="165" y2="95" stroke="currentColor" strokeWidth="0.5" />
-
-        <text x="108" y="32" fill="#3b82f6" className="text-[5px] font-mono animate-pulse">EMBEDDING_MATCH</text>
-      </svg>
+          {/* Node Labels */}
+          <text x="12" y="65" fill="#eab308" className="text-[5px] font-mono uppercase">QUERY_INPUT</text>
+          <text x="105" y="90" fill="currentColor" className="text-[5.5px] font-mono">SIMILARITY: 0.89</text>
+          <text x="156" y="67" fill="#eab308" className="text-[5px] font-mono uppercase font-bold">RAG_OUT</text>
+        </svg>
+      </div>
     );
   }
 
   // explainable-ai
   return (
-    <svg className="w-full h-full text-[#d8d1c2]/20" viewBox="0 0 200 150" fill="none">
-      {/* Decision tree node mapping & SHAP attribution bar charts */}
-      {/* Decison tree lines */}
-      <circle cx="100" cy="25" r="4" stroke="#a855f7" strokeWidth="1.5" />
-      <line x1="97" y1="28" x2="60" y2="55" stroke="currentColor" strokeWidth="0.75" />
-      <line x1="103" y1="28" x2="140" y2="55" stroke="currentColor" strokeWidth="0.75" />
+    <div className="relative w-full h-full overflow-hidden flex flex-col justify-between p-1 bg-black/10 rounded">
+      <svg className="w-full h-[65%] text-purple-500/10" viewBox="0 0 200 90" fill="none">
+        {/* Decision trees */}
+        <circle cx="100" cy="14" r="5.5" stroke="#a855f7" strokeWidth="1.5" fill="#050608" />
+        <line x1="96" y1="18" x2="60" y2="44" stroke="currentColor" strokeWidth="1" />
+        <line x1="104" y1="18" x2="140" y2="44" stroke="currentColor" strokeWidth="1" />
 
-      <circle cx="60" cy="58" r="4" stroke="currentColor" strokeWidth="1" />
-      <circle cx="140" cy="58" r="4" stroke="currentColor" strokeWidth="1" />
+        <circle cx="60" cy="48" r="5" stroke="currentColor" strokeWidth="1" fill="#050608" />
+        <circle cx="140" cy="48" r="5" stroke="#a855f7" strokeWidth="1.25" fill="#050608" />
 
-      <line x1="60" y1="62" x2="40" y2="85" stroke="currentColor" strokeWidth="0.5" />
-      <line x1="60" y1="62" x2="80" y2="85" stroke="currentColor" strokeWidth="0.5" />
+        <line x1="60" y1="53" x2="40" y2="76" stroke="currentColor" strokeWidth="0.75" />
+        <line x1="60" y1="53" x2="80" y2="76" stroke="currentColor" strokeWidth="0.75" strokeDasharray="2 2" />
 
-      <circle cx="40" cy="88" r="3" stroke="currentColor" strokeWidth="1" />
-      <circle cx="80" cy="88" r="3" stroke="currentColor" strokeWidth="1" />
+        <circle cx="40" cy="80" r="4" stroke="currentColor" strokeWidth="1" fill="#050608" />
+        <circle cx="80" cy="80" r="4" stroke="currentColor" strokeWidth="1" fill="#050608" />
 
-      {/* SHAP attributions bar chart */}
-      <text x="110" y="90" fill="#a855f7" className="text-[5px] font-mono font-bold">SHAP ATTRIBUTION</text>
-      
-      <rect x="110" y="98" width="50" height="4" fill="rgba(34,197,94,0.3)" />
-      <text x="165" y="102" fill="#22c55e" className="text-[4px] font-mono">+0.24 (Age)</text>
+        <line x1="140" y1="53" x2="120" y2="76" stroke="currentColor" strokeWidth="0.75" />
+        <line x1="140" y1="53" x2="160" y2="76" stroke="#a855f7" strokeWidth="1" />
 
-      <rect x="110" y="106" width="30" height="4" fill="rgba(239,68,68,0.3)" />
-      <text x="145" y="110" fill="#ef4444" className="text-[4px] font-mono">-0.15 (Income)</text>
+        <circle cx="120" cy="80" r="4" stroke="currentColor" strokeWidth="1" fill="#050608" />
+        <circle cx="160" cy="80" r="4.5" stroke="#a855f7" strokeWidth="1.5" fill="#a855f7" />
 
-      <rect x="110" y="114" width="40" height="4" fill="rgba(34,197,94,0.3)" />
-      <text x="155" y="118" fill="#22c55e" className="text-[4px] font-mono">+0.18 (Debt)</text>
-    </svg>
+        <text x="145" y="42" fill="#a855f7" className="text-[5.5px] font-mono uppercase font-bold animate-pulse">SHAP_SPLIT</text>
+      </svg>
+
+      {/* Feature attribution charts */}
+      <div className="h-[30%] border-t border-white/5 bg-black/10 p-2 flex flex-col justify-center gap-1.5 font-mono text-[5.5px]">
+        <div className="flex items-center gap-2">
+          <span className="text-white/30 w-16">Feature 01:</span>
+          <div className="flex-1 h-2 bg-white/5 rounded-full overflow-hidden">
+            <motion.div initial={{ width: 0 }} whileInView={{ width: "80%" }} transition={{ duration: 1.2, ease: "easeOut" }} className="h-full bg-green-500/40" />
+          </div>
+          <span className="text-green-400 font-bold">+0.42</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="text-white/30 w-16">Feature 02:</span>
+          <div className="flex-1 h-2 bg-white/5 rounded-full overflow-hidden">
+            <motion.div initial={{ width: 0 }} whileInView={{ width: "55%" }} transition={{ duration: 1.2, ease: "easeOut" }} className="h-full bg-red-500/40" />
+          </div>
+          <span className="text-red-400 font-bold">-0.28</span>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -291,21 +345,22 @@ function ProjectCard({
         transition: "transform 0.15s ease-out",
       }}
       animate={{
-        scale: isActive ? 1.03 : 0.94,
-        opacity: isActive ? 1 : 0.45,
-        y: [0, -8, 0], // Continuous floating wave oscillation
+        scale: isActive ? 1.04 : 0.92,
+        opacity: isActive ? 1 : 0.38,
+        y: [0, -8, 0],
       }}
       transition={{
         scale: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
         opacity: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
-        y: { duration: 5, ease: "easeInOut", repeat: Infinity, delay: index * 0.4 } // Float oscillation
+        y: { duration: 5.5, ease: "easeInOut", repeat: Infinity, delay: index * 0.45 }
       }}
-      className={`relative flex flex-col justify-between shrink-0 w-[82vw] sm:w-[45vw] lg:w-[28vw] aspect-[3/4.2] border hairline bg-[var(--color-bg-soft)] p-6 select-none cursor-none snap-center overflow-hidden group`}
+      className="relative flex flex-col justify-between shrink-0 w-[82vw] sm:w-[45vw] lg:w-[28vw] aspect-[3/4.2] border border-white/10 hover:border-white/20 bg-[var(--color-bg-soft)] p-6 select-none cursor-none snap-center overflow-hidden group shadow-[0_4px_30px_rgba(0,0,0,0.2)]"
       data-cursor="VIEW"
     >
-      <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent pointer-events-none" />
+      {/* Visual background gradient layer */}
+      <div className="absolute inset-0 bg-gradient-to-br from-white/[0.015] to-transparent pointer-events-none" />
 
-      {/* Dynamic Background Glow */}
+      {/* Dynamic Hover Glow */}
       <div 
         className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none blur-[40px] -z-10"
         style={{
@@ -322,42 +377,53 @@ function ProjectCard({
         }}
       />
 
+      {/* Hover border draw */}
       <div className="absolute inset-0 border border-[var(--color-accent)] opacity-0 scale-[0.98] group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 pointer-events-none" />
 
+      {/* Card Header */}
       <div className="flex items-start justify-between">
         <span className="display-type text-[4.5rem] leading-none text-white/5 group-hover:text-white/10 transition-colors duration-300">
           {String(index + 1).padStart(2, "0")}
         </span>
         <div className="flex flex-col items-end">
-          <span className="micro-label text-[9px] border border-white/10 px-2 py-0.5 rounded bg-black/30">
+          <span className="micro-label text-[9px] border border-white/10 px-2.5 py-0.5 rounded bg-black/30">
             {project.status}
           </span>
-          <span className="text-[10px] font-mono text-[var(--color-dim)] mt-2">
+          <span className="text-[9px] font-mono text-[var(--color-dim)] mt-2">
             ID: {project.id}
           </span>
         </div>
       </div>
 
-      {/* Schematic drawing */}
+      {/* Schematic animation layer */}
       <div className="flex-1 my-6 flex items-center justify-center overflow-hidden border border-white/5 bg-black/25 rounded p-4 relative">
-        <div className="w-full h-full transform group-hover:scale-105 transition-transform duration-500">
+        <div className="w-full h-full transform group-hover:scale-[1.03] transition-transform duration-500">
           <CardSchematic type={project.id} />
         </div>
       </div>
 
-      <div>
+      {/* Info Block (Expands metadata slightly on hover) */}
+      <div className="relative">
         <h3 className="text-xl font-bold tracking-tight text-white mb-2 font-sans group-hover:text-[var(--color-accent)] transition-colors duration-300">
           {project.name}
         </h3>
+        
+        {/* Supporting description */}
         <p className="text-xs text-[var(--color-muted)] line-clamp-2 leading-relaxed mb-4">
           {project.shortDescription}
         </p>
-        <div className="flex items-center justify-between border-t border-white/5 pt-4">
-          <span className="text-[10px] font-mono text-[var(--color-dim)] truncate max-w-[70%]">
+
+        {/* Dynamic metadata appearing on hover */}
+        <div className="h-0 opacity-0 group-hover:h-5 group-hover:opacity-100 transition-all duration-300 overflow-hidden text-[9px] font-mono text-[var(--color-accent)]/80">
+          SYSTEM_TYPE: DEEP_LEARNING_PIPELINE
+        </div>
+
+        <div className="flex items-center justify-between border-t border-white/5 pt-4 mt-1">
+          <span className="text-[9px] font-mono text-[var(--color-dim)] truncate max-w-[70%]">
             {project.techStack.join(" // ")}
           </span>
           <span className="inline-flex items-center gap-1 text-[10px] font-bold text-[var(--color-accent)] uppercase tracking-wider group-hover:translate-x-1 transition-transform">
-            <span>Explore</span>
+            <span>Inspect</span>
             <ArrowUpRight size={10} />
           </span>
         </div>
@@ -372,7 +438,7 @@ export default function Projects({ activeCapability }: { activeCapability: strin
   const [activeThemeColor, setActiveThemeColor] = useState("rgba(5, 6, 8, 0.95)");
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  // Filter projects dynamically
+  // Filter projects dynamically based on capability
   const filteredProjects = activeCapability
     ? projectsData.filter((p) => {
         if (activeCapability === "Computer Vision") {
@@ -450,9 +516,9 @@ export default function Projects({ activeCapability }: { activeCapability: strin
   return (
     <section
       id="projects"
-      className="relative overflow-hidden border-b hairline py-[var(--section-space-tight)] transition-colors duration-1000"
+      className="relative overflow-hidden border-b hairline py-[var(--section-space-tight)] transition-colors duration-1000 bg-[#050608]"
       style={{ backgroundColor: activeThemeColor }}
-      aria-label="Projects Section"
+      aria-label="Systems Explorer Section"
     >
       <TechnicalGrid />
 
@@ -460,7 +526,7 @@ export default function Projects({ activeCapability }: { activeCapability: strin
       <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-[#050608] to-transparent pointer-events-none z-10" />
       <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#050608] to-transparent pointer-events-none z-10" />
 
-      <div className="site-shell mb-10">
+      <div className="site-shell mb-10 relative z-10">
         <div className="editorial-grid">
           <div className="col-span-12 md:col-span-4">
             <div className="micro-label text-accent">
@@ -478,7 +544,7 @@ export default function Projects({ activeCapability }: { activeCapability: strin
         </div>
       </div>
 
-      <div className="relative w-full overflow-hidden py-10">
+      <div className="relative w-full overflow-hidden py-10 z-10">
         {filteredProjects.length > 0 ? (
           <div
             ref={scrollContainerRef}

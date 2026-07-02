@@ -342,7 +342,7 @@ function LogoRail({ items, reverse = false }: { items: ToolItem[]; reverse?: boo
           >
             {/* Hover Glow */}
             <div className="absolute inset-0 bg-radial-glow opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-                 style={{ background: "radial-gradient(circle, rgba(216, 209, 194, 0.04) 0%, transparent 70%)" }} />
+              style={{ background: "radial-gradient(circle, rgba(216, 209, 194, 0.04) 0%, transparent 70%)" }} />
 
             {/* Hover Tooltip */}
             <div className="absolute bottom-[82%] left-1/2 -translate-x-1/2 mb-2 px-2.5 py-1 bg-black border border-white/10 rounded text-[9px] font-mono text-[var(--color-accent)] opacity-0 pointer-events-none group-hover:opacity-100 group-hover:-translate-y-1 transition-all duration-300 whitespace-nowrap z-20">
@@ -480,20 +480,18 @@ export default function TechStack({
                       setActiveCapability(cap.name);
                     }
                   }}
-                  className={`text-left p-6 border rounded-lg transition-all duration-300 flex flex-col justify-between h-56 select-none relative overflow-hidden group ${
-                    isSelected
-                      ? "bg-[var(--color-accent)]/10 border-[var(--color-accent)] shadow-[0_0_20px_rgba(216,209,194,0.08)]"
-                      : "bg-white/[0.01] border-white/10 hover:border-white/20 hover:bg-white/[0.02]"
-                  }`}
+                  className={`text-left p-6 border rounded-lg transition-all duration-300 flex flex-col justify-between h-56 select-none relative overflow-hidden group ${isSelected
+                    ? "bg-[var(--color-accent)]/10 border-[var(--color-accent)] shadow-[0_0_20px_rgba(216,209,194,0.08)]"
+                    : "bg-white/[0.01] border-white/10 hover:border-white/20 hover:bg-white/[0.02]"
+                    }`}
                 >
                   {/* Subtle active border glow */}
                   <div className="absolute inset-0 border border-[var(--color-accent)] opacity-0 scale-[0.98] group-hover:opacity-50 group-hover:scale-100 transition-all duration-300 pointer-events-none" />
 
                   <div>
                     <div className="flex justify-between items-start mb-4">
-                      <div className={`p-2.5 rounded border transition-colors ${
-                        isSelected ? "border-[var(--color-accent)] text-[var(--color-accent)]" : "border-white/10 text-white/50 group-hover:text-white"
-                      }`}>
+                      <div className={`p-2.5 rounded border transition-colors ${isSelected ? "border-[var(--color-accent)] text-[var(--color-accent)]" : "border-white/10 text-white/50 group-hover:text-white"
+                        }`}>
                         <Icon size={18} />
                       </div>
                       <span className="font-mono text-[9px] text-white/30 border border-white/5 px-2 py-0.5 rounded uppercase">

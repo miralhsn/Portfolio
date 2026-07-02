@@ -48,11 +48,10 @@ function PipelineVisualizer({ architecture }: { architecture: Array<{ step: stri
           <div key={index} className="flex items-center">
             <button
               onClick={() => setActiveStep(index)}
-              className={`flex items-center gap-2 px-3 py-1.5 rounded border text-xs font-mono transition-all duration-300 ${
-                index === activeStep
+              className={`flex items-center gap-2 px-3 py-1.5 rounded border text-xs font-mono transition-all duration-300 ${index === activeStep
                   ? "bg-[var(--color-accent)]/10 border-[var(--color-accent)] text-[var(--color-accent)] shadow-[0_0_15px_rgba(216,209,194,0.1)]"
                   : "bg-white/[0.02] border-white/10 text-[var(--color-dim)] hover:border-white/20 hover:text-white"
-              }`}
+                }`}
             >
               <span className={`h-1.5 w-1.5 rounded-full ${index === activeStep ? "bg-[var(--color-accent)] animate-ping" : "bg-white/20"}`} />
               <span>{item.step}</span>
@@ -177,7 +176,7 @@ export function SlideOverCaseStudy({ isOpen, data, onClose }: SlideOverCaseStudy
 
             {/* Scrollable details */}
             <div className="flex-1 overflow-y-auto px-6 py-8 sm:px-8 space-y-10 scrollbar-none">
-              
+
               {/* Product header summary */}
               <motion.div variants={itemVariants} className="pb-4">
                 <span className="text-[10px] font-mono text-[var(--color-accent)] border border-[var(--color-accent)]/20 px-2 py-0.5 rounded mb-2 inline-block bg-black/30">

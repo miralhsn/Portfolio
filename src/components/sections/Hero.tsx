@@ -68,7 +68,7 @@ export default function Hero() {
                   hi, i&apos;m
                 </motion.span>
               </span>
-              
+
               {/* Line 2: Miral Hasan */}
               <span className="block overflow-hidden h-[clamp(3.8rem,13vw,10.5rem)] py-1 mt-2">
                 <motion.span

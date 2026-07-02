@@ -8,8 +8,8 @@ export default function IntroLoader({ onComplete }: { onComplete: () => void }) 
   const [shouldRender, setShouldRender] = useState(false);
 
   useEffect(() => {
-    // Check if user already saw the intro recently
-    const hasSeenIntro = localStorage.getItem("mh-portfolio-intro-seen");
+    // Check if user already saw the intro recently (using session storage for reload/developer comfort)
+    const hasSeenIntro = sessionStorage.getItem("mh-portfolio-intro-seen");
     if (hasSeenIntro === "true") {
       onComplete();
       return;
@@ -19,11 +19,9 @@ export default function IntroLoader({ onComplete }: { onComplete: () => void }) 
   }, [onComplete]);
 
   const handleAnimationComplete = () => {
-    localStorage.setItem("mh-portfolio-intro-seen", "true");
+    sessionStorage.setItem("mh-portfolio-intro-seen", "true");
     setIsFinished(true);
-    setTimeout(() => {
-      onComplete();
-    }, 1000); // Allow mask animation to finish
+    onComplete(); // Reveal home page content concurrently behind the shrinking shutter mask
   };
 
   if (!shouldRender) return null;
