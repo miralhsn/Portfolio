@@ -208,6 +208,96 @@ button {
   .reveal-line > span {
     display: block;
   }
+
+  .logo-rail {
+    position: relative;
+    overflow: hidden;
+    color: var(--color-muted);
+    mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+  }
+
+  .logo-track {
+    display: flex;
+    width: max-content;
+    animation: logo-marquee 42s linear infinite;
+    will-change: transform;
+  }
+
+  .logo-track-reverse {
+    animation-direction: reverse;
+    animation-duration: 48s;
+  }
+
+  .logo-rail:hover .logo-track {
+    animation-play-state: paused;
+  }
+
+  .logo-item {
+    display: inline-flex;
+    min-width: clamp(14rem, 20vw, 19rem);
+    align-items: center;
+    gap: 1rem;
+    border-right: 1px solid var(--color-line);
+    padding: clamp(1rem, 1.6vw, 1.4rem) clamp(1.25rem, 2vw, 2rem);
+    transition: color var(--duration-fast) var(--ease-standard), background-color var(--duration-fast) var(--ease-standard);
+  }
+
+  .logo-item:hover {
+    background: rgba(247, 246, 240, 0.025);
+    color: var(--color-text);
+  }
+
+  .logo-mark {
+    display: grid;
+    width: 2.6rem;
+    height: 2.6rem;
+    flex: 0 0 auto;
+    place-items: center;
+    color: var(--color-accent);
+  }
+
+  .logo-mark svg {
+    width: 100%;
+    height: 100%;
+    transition: transform var(--duration-medium) var(--ease-out-expo), opacity var(--duration-fast) var(--ease-standard);
+  }
+
+  .logo-item:hover .logo-mark svg {
+    transform: translateY(-2px) rotate(-2deg);
+  }
+
+  .logo-copy {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .logo-name {
+    color: var(--color-text);
+    font-size: 0.92rem;
+    font-weight: 800;
+    line-height: 1.1;
+  }
+
+  .logo-meta {
+    color: var(--color-dim);
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+}
+
+@keyframes logo-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
 }
 
 .noise::after {
@@ -233,5 +323,15 @@ button {
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .logo-track {
+    animation: none !important;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .logo-rail {
+    mask-image: none;
   }
 }
