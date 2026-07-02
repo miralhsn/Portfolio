@@ -3,6 +3,7 @@
 import { ArrowRight, Mail } from "lucide-react";
 import HeadlineReveal from "@/components/motion/HeadlineReveal";
 import MagneticLink from "@/components/motion/MagneticLink";
+import AuroraMesh from "./AuroraMesh";
 
 export default function Hero() {
   return (
@@ -11,6 +12,7 @@ export default function Hero() {
       className="relative min-h-screen overflow-hidden border-b hairline pt-28"
       aria-label="Hero Section"
     >
+      <AuroraMesh />
       <div className="site-shell editorial-grid min-h-[calc(100vh-7rem)] content-end pb-14 sm:pb-20">
         <div className="col-span-12 md:col-span-10 md:col-start-2">
           <HeadlineReveal

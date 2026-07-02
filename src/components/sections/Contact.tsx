@@ -2,14 +2,16 @@ import { ArrowUpRight } from "lucide-react";
 import { siteConfig } from "@/lib/site";
 import HeadlineReveal from "@/components/motion/HeadlineReveal";
 import MagneticLink from "@/components/motion/MagneticLink";
+import Spotlight from "./Spotlight";
 
 export default function Contact() {
   return (
     <section
       id="contact"
-      className="relative bg-[var(--color-bg-soft)] section-space"
+      className="relative bg-[var(--color-bg-soft)] section-space overflow-hidden"
       aria-label="Contact Section"
     >
+      <Spotlight />
       <div className="site-shell">
         <div className="editorial-grid">
           <div className="col-span-12 md:col-span-3">

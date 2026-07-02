@@ -1,14 +1,11 @@
 "use client";
 
-import { useState } from "react";
-import dynamic from "next/dynamic";
-import { ArrowUpRight, Terminal } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowUpRight, Terminal, Eye, Cpu, Database, Network } from "lucide-react";
 import HeadlineReveal from "@/components/motion/HeadlineReveal";
 import { SlideOverCaseStudy, type CaseStudyData } from "@/components/SlideOverCaseStudy";
-
-const CurvedProjectCarousel = dynamic(() => import("@/components/sections/CurvedProjectCarousel"), {
-  ssr: false,
-});
+import TechnicalGrid from "./TechnicalGrid";
 
 const projectsData: CaseStudyData[] = [
   {
@@ -39,7 +36,7 @@ const projectsData: CaseStudyData[] = [
     results: "Deployed in 5 high-traffic retail spaces. Reached 94% precision on shoplifting alerts, and decreased total false alarm logs by 89%, saving security operators hours of manual review.",
     lessonsLearned: "Telemetry is vital: real-time GPU/CPU resource dashboards saved countless debugging hours during deployment. Clean and diverse Re-ID data is the primary bottleneck for multi-camera tracking stability.",
     techStack: ["YOLOv10", "DeepSORT", "PyTorch", "GStreamer", "FastAPI", "PostgreSQL"],
-    color: "#d8d1c2",
+    color: "rgba(34, 197, 94, 0.05)", // Deep subtle green theme
     github: "https://github.com/miralhsn/SecureVision",
     demo: "https://github.com/miralhsn"
   },
@@ -71,7 +68,7 @@ const projectsData: CaseStudyData[] = [
     results: "Reduced average developer review cycles by 35% across integrated repositories. Achieved a 92% security anomaly detection precision rate. Logged a 0% JSON structural parser error rate.",
     lessonsLearned: "Strict parsing schema structures are mandatory for production LLM integrations. LLMs must be fed localized AST trees, not raw file text, to avoid context-token bloat and hallucination patterns.",
     techStack: ["GPT-4", "LangChain", "FastAPI", "Pydantic", "Redis", "GitHub API"],
-    color: "#d8d1c2",
+    color: "rgba(59, 130, 246, 0.05)", // Deep subtle blue theme
     github: "https://github.com/miralhsn/AI-Code-Reviewer",
     demo: "https://github.com/miralhsn"
   },
@@ -103,155 +100,331 @@ const projectsData: CaseStudyData[] = [
     challenges: "Mitigating embedding space collapse on highly technical corpora. Implementing strict inline citation constraints on the synthesis model. Maintaining low-latency query results (<800ms) with multiple network hops.",
     results: "Delivers query answers with <800ms total latency. Achieved an NDCG@10 rank score of 0.89. Increased corporate search success rates by 87% compared to historical BM25 databases.",
     lessonsLearned: "Hybrid retrieval is mandatory for robust production search. Embedding models must be periodically fine-tuned or augmented with custom domain synonym dictionaries to capture industry-specific vocabulary.",
-    techStack: ["FAISS", "OpenAI Embeddings", "LangChain", "FastAPI", "Next.js", "Redis"],
-    color: "#d8d1c2",
+    techStack: ["FAISS", "OpenAI", "LangChain", "FastAPI", "Next.js", "Redis"],
+    color: "rgba(234, 179, 8, 0.04)", // Deep subtle bronze/yellow theme
     github: "https://github.com/miralhsn/Semantic-Search",
     demo: "https://github.com/miralhsn"
   }
 ];
 
-function ProjectPreview({
-  project,
-  index,
-  position,
-  visible,
-}: {
-  project: CaseStudyData | null;
-  index: number;
-  position: { x: number; y: number };
-  visible: boolean;
-}) {
-  if (!project) return null;
+function CardSchematic({ type }: { type: string }) {
+  if (type === "securevision") {
+    return (
+      <svg className="w-full h-full text-[#d8d1c2]/20" viewBox="0 0 200 150" fill="none">
+        <rect x="10" y="10" width="80" height="60" rx="3" stroke="currentColor" strokeWidth="1" strokeDasharray="2 2" />
+        <rect x="110" y="10" width="80" height="60" rx="3" stroke="currentColor" strokeWidth="1" strokeDasharray="2 2" />
+        <rect x="10" y="80" width="80" height="60" rx="3" stroke="currentColor" strokeWidth="1" strokeDasharray="2 2" />
+        <rect x="110" y="80" width="80" height="60" rx="3" stroke="currentColor" strokeWidth="1" strokeDasharray="2 2" />
+        <circle cx="50" cy="40" r="6" stroke="#d8d1c2" strokeWidth="1" className="animate-pulse" />
+        <path d="M50 25 V55 M35 40 H65" stroke="currentColor" strokeWidth="0.5" />
+        <text x="60" y="35" fill="currentColor" className="text-[6px] font-mono">TRACK_ID: 981</text>
+        <text x="60" y="45" fill="#22c55e" className="text-[6px] font-mono">CONF: 98.4%</text>
+        <rect x="130" y="25" width="40" height="30" stroke="#d8d1c2" strokeWidth="1" />
+        <line x1="130" y1="25" x2="115" y2="15" stroke="currentColor" strokeWidth="0.5" />
+        <text x="133" y="38" fill="currentColor" className="text-[5px] font-mono">YOLO: PERSON</text>
+      </svg>
+    );
+  }
+
+  if (type === "code-reviewer") {
+    return (
+      <svg className="w-full h-full text-[#d8d1c2]/20" viewBox="0 0 200 150" fill="none">
+        <circle cx="100" cy="20" r="8" stroke="currentColor" strokeWidth="1.5" />
+        <text x="96" y="23" fill="currentColor" className="text-[8px] font-bold font-mono">R</text>
+        <line x1="100" y1="28" x2="60" y2="60" stroke="currentColor" strokeWidth="1" />
+        <line x1="100" y1="28" x2="140" y2="60" stroke="currentColor" strokeWidth="1" />
+        <circle cx="60" cy="68" r="8" stroke="currentColor" strokeWidth="1" />
+        <circle cx="140" cy="68" r="8" stroke="#d8d1c2" strokeWidth="1.5" />
+        <line x1="60" y1="76" x2="30" y2="110" stroke="currentColor" strokeWidth="0.5" />
+        <line x1="60" y1="76" x2="90" y2="110" stroke="currentColor" strokeWidth="0.5" />
+        <circle cx="30" cy="118" r="6" stroke="currentColor" strokeWidth="1" />
+        <circle cx="90" cy="118" r="6" stroke="currentColor" strokeWidth="1" />
+        <text x="130" y="100" fill="#3b82f6" className="text-[6px] font-mono">JSON_SCHEMA: MATCH</text>
+        <rect x="125" y="105" width="60" height="20" rx="2" stroke="currentColor" strokeWidth="0.5" />
+        <text x="130" y="117" fill="currentColor" className="text-[5px] font-mono">Pydantic validation</text>
+      </svg>
+    );
+  }
 
   return (
-    <div
-      className="pointer-events-none fixed z-40 hidden w-[27rem] border hairline bg-[var(--color-bg-soft)] p-5 transition-[opacity,transform] duration-300 ease-[var(--ease-out-expo)] lg:block"
-      style={{
-        left: position.x,
-        top: position.y,
-        opacity: visible ? 1 : 0,
-        transform: visible ? "translate3d(0,0,0) scale(1)" : "translate3d(0,14px,0) scale(0.96)",
-      }}
-    >
-      <div className="aspect-[4/3] border hairline bg-[var(--color-bg)] p-5">
-        <div className="flex h-full flex-col justify-between">
-          <div className="flex items-start justify-between gap-6">
-            <span className="display-type text-[6rem] leading-none text-[rgba(247,246,240,0.08)]">
-              {String(index + 1).padStart(2, "0")}
-            </span>
-            <span className="micro-label text-right">{project.status}</span>
-          </div>
-          <div>
-            <p className="micro-label mb-3">{project.id}</p>
-            <p className="max-w-[18rem] text-base font-semibold leading-tight text-[var(--color-text)]">
-              {project.name}
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
+    <svg className="w-full h-full text-[#d8d1c2]/20" viewBox="0 0 200 150" fill="none">
+      <circle cx="40" cy="40" r="1.5" fill="currentColor" />
+      <circle cx="50" cy="30" r="1.5" fill="currentColor" />
+      <circle cx="35" cy="55" r="1.5" fill="currentColor" />
+      <circle cx="70" cy="45" r="1.5" fill="currentColor" />
+      <circle cx="150" cy="110" r="1.5" fill="currentColor" />
+      <circle cx="160" cy="100" r="1.5" fill="currentColor" />
+      <circle cx="140" cy="120" r="1.5" fill="currentColor" />
+      <path d="M45 42 C 70 80, 110 80, 150 105" stroke="#d8d1c2" strokeWidth="1" strokeDasharray="3 3" />
+      <path d="M150 105 L142 105 M150 105 L150 97" stroke="#d8d1c2" strokeWidth="1" />
+      <circle cx="95" cy="75" r="14" stroke="currentColor" strokeWidth="0.5" strokeDasharray="1 1" />
+      <text x="105" y="65" fill="currentColor" className="text-[5px] font-mono">FAISS ANN LIST</text>
+      <text x="80" y="140" fill="currentColor" className="text-[6px] font-mono">RRF Similarity: 0.892</text>
+    </svg>
   );
 }
 
-function ProjectRow({
+function ProjectCard({
   project,
   index,
-  onClick,
-  onHoverStart,
-  onHoverMove,
-  onHoverEnd,
-  active,
-  dimmed,
+  isActive,
+  onClick
 }: {
   project: CaseStudyData;
   index: number;
+  isActive: boolean;
   onClick: () => void;
-  onHoverStart: (project: CaseStudyData, index: number, e: React.MouseEvent) => void;
-  onHoverMove: (e: React.MouseEvent) => void;
-  onHoverEnd: () => void;
-  active: boolean;
-  dimmed: boolean;
 }) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const card = cardRef.current;
+    if (!card) return;
+
+    const { left, top, width, height } = card.getBoundingClientRect();
+    const x = (e.clientX - left) / width - 0.5;
+    const y = (e.clientY - top) / height - 0.5;
+
+    setTilt({ x: x * 15, y: -y * 15 });
+  };
+
+  const handleMouseLeave = () => {
+    setTilt({ x: 0, y: 0 });
+  };
+
   return (
-    <button
-      type="button"
+    <motion.div
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
       onClick={onClick}
-      onMouseEnter={(e) => onHoverStart(project, index, e)}
-      onMouseMove={onHoverMove}
-      onMouseLeave={onHoverEnd}
+      style={{
+        transform: `perspective(1000px) rotateY(${tilt.x}deg) rotateX(${tilt.y}deg)`,
+        transition: "transform 0.15s ease-out",
+      }}
+      animate={{
+        scale: isActive ? 1.03 : 0.94,
+        opacity: isActive ? 1 : 0.45,
+      }}
+      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      className={`relative flex flex-col justify-between shrink-0 w-[82vw] sm:w-[45vw] lg:w-[28vw] aspect-[3/4.2] border hairline bg-[var(--color-bg-soft)] p-6 select-none cursor-none snap-center overflow-hidden group`}
       data-cursor="VIEW"
-      className="focus-ring group grid w-full grid-cols-12 gap-4 border-t hairline py-7 text-left transition-[opacity,padding] duration-300 ease-[var(--ease-out-expo)] hover:px-3 md:py-10"
-      style={{ opacity: dimmed && !active ? 0.34 : 1 }}
     >
-      <div className="col-span-3 sm:col-span-2 lg:col-span-1">
-        <span className="micro-label">{String(index + 1).padStart(2, "0")}</span>
+      <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent pointer-events-none" />
+
+      <div 
+        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none blur-[40px] -z-10"
+        style={{
+          background: `radial-gradient(circle at 50% 50%, ${project.color === "rgba(34, 197, 94, 0.05)" ? "#22c55e" : project.color === "rgba(59, 130, 246, 0.05)" ? "#3b82f6" : "#eab308"} 0%, transparent 60%)`,
+          opacity: 0.12
+        }}
+      />
+
+      <div className="absolute inset-0 border border-[var(--color-accent)] opacity-0 scale-[0.98] group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 pointer-events-none" />
+
+      <div className="flex items-start justify-between">
+        <span className="display-type text-[4.5rem] leading-none text-white/5 group-hover:text-white/10 transition-colors duration-300">
+          {String(index + 1).padStart(2, "0")}
+        </span>
+        <div className="flex flex-col items-end">
+          <span className="micro-label text-[9px] border border-white/10 px-2 py-0.5 rounded bg-black/30">
+            {project.status}
+          </span>
+          <span className="text-[10px] font-mono text-[var(--color-dim)] mt-2">
+            ID: {project.id}
+          </span>
+        </div>
       </div>
 
-      <div className="col-span-9 sm:col-span-5 lg:col-span-4">
-        <span className="micro-label mb-3 block">{project.id}</span>
-        <h3 className="text-[clamp(2.5rem,6vw,6rem)] transition-colors duration-300 group-hover:text-[var(--color-accent)]">
+      <div className="flex-1 my-6 flex items-center justify-center overflow-hidden border border-white/5 bg-black/20 rounded p-4 relative">
+        <div className="w-full h-full transform group-hover:scale-105 transition-transform duration-500">
+          <CardSchematic type={project.id} />
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-bold tracking-tight text-white mb-2 font-sans group-hover:text-[var(--color-accent)] transition-colors duration-300">
           {project.name}
         </h3>
-      </div>
-
-      <div className="col-span-12 sm:col-span-5 lg:col-span-4">
-        <div className="mb-4 flex flex-wrap items-center gap-x-3 gap-y-2">
-          <span className="micro-label text-accent">{project.status}</span>
-          <span className="h-px w-8 bg-[var(--color-line)]" />
-          <span className="body-small text-[var(--color-muted)]">{project.tagline}</span>
-        </div>
-        <p className="body-small max-w-[42rem]">{project.shortDescription}</p>
-        <p className="mt-5 text-xs font-semibold leading-relaxed text-dim">
-          {project.techStack.join(" / ")}
+        <p className="text-xs text-[var(--color-muted)] line-clamp-2 leading-relaxed mb-4">
+          {project.shortDescription}
         </p>
+        <div className="flex items-center justify-between border-t border-white/5 pt-4">
+          <span className="text-[10px] font-mono text-[var(--color-dim)] truncate max-w-[70%]">
+            {project.techStack.join(" // ")}
+          </span>
+          <span className="inline-flex items-center gap-1 text-[10px] font-bold text-[var(--color-accent)] uppercase tracking-wider group-hover:translate-x-1 transition-transform">
+            <span>Explore</span>
+            <ArrowUpRight size={10} />
+          </span>
+        </div>
       </div>
-
-      <div className="col-span-12 flex items-end justify-between gap-4 text-sm font-bold text-[var(--color-text)] sm:col-span-12 lg:col-span-3 lg:justify-end">
-        <span className="inline-flex items-center gap-2">
-          <Terminal size={15} strokeWidth={1.8} />
-          <span>Case Study</span>
-        </span>
-        <span className="inline-flex items-center gap-2 text-dim transition-colors duration-300 group-hover:text-[var(--color-text)]">
-          <span>Explore â†’</span>
-          <ArrowUpRight size={17} strokeWidth={1.6} className="transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
-        </span>
-      </div>
-    </button>
+    </motion.div>
   );
 }
 
-export default function Projects() {
+export default function Projects({ activeCapability }: { activeCapability: string | null }) {
   const [selectedProject, setSelectedProject] = useState<CaseStudyData | null>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeThemeColor, setActiveThemeColor] = useState("rgba(5, 6, 8, 0.95)");
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  // Filter projects dynamically
+  const filteredProjects = activeCapability
+    ? projectsData.filter((p) => {
+        if (activeCapability === "Computer Vision") {
+          return p.techStack.some((t) => ["YOLOv10", "DeepSORT", "PyTorch", "GStreamer", "OpenCV"].includes(t));
+        }
+        if (activeCapability === "LLMs") {
+          return p.techStack.some((t) => ["GPT-4", "LangChain", "OpenAI", "FAISS"].includes(t));
+        }
+        if (activeCapability === "Backend") {
+          return p.techStack.some((t) => ["FastAPI", "Redis", "PostgreSQL", "GStreamer"].includes(t));
+        }
+        if (activeCapability === "Frontend") {
+          return p.techStack.some((t) => ["Next.js"].includes(t));
+        }
+        if (activeCapability === "Cloud") {
+          return p.techStack.some((t) => ["GitHub API", "FastAPI"].includes(t));
+        }
+        if (activeCapability === "Databases") {
+          return p.techStack.some((t) => ["PostgreSQL", "Redis", "FAISS"].includes(t));
+        }
+        return true;
+      })
+    : projectsData;
+
+  const handleScroll = () => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const scrollLeft = container.scrollLeft;
+    const containerWidth = container.clientWidth;
+
+    let cardWidth = containerWidth * 0.82;
+    if (window.innerWidth >= 1024) {
+      cardWidth = containerWidth * 0.28;
+    } else if (window.innerWidth >= 640) {
+      cardWidth = containerWidth * 0.45;
+    }
+
+    const center = scrollLeft + containerWidth / 2;
+    const gap = 16;
+    const step = cardWidth + gap;
+
+    let closestIndex = 0;
+    let minDistance = Infinity;
+
+    for (let i = 0; i < filteredProjects.length; i++) {
+      const cardCenter = i * step + step / 2;
+      const distance = Math.abs(center - cardCenter);
+      if (distance < minDistance) {
+        minDistance = distance;
+        closestIndex = i;
+      }
+    }
+
+    setActiveIndex(closestIndex);
+  };
+
+  // Reset activeIndex and scroll when filter changes
+  useEffect(() => {
+    setActiveIndex(0);
+    const container = scrollContainerRef.current;
+    if (container) {
+      container.scrollTo({ left: 0, behavior: "smooth" });
+    }
+  }, [activeCapability]);
+
+  useEffect(() => {
+    const selected = filteredProjects[activeIndex];
+    if (selected) {
+      setActiveThemeColor(selected.color);
+    } else {
+      setActiveThemeColor("rgba(5, 6, 8, 0.95)");
+    }
+  }, [activeIndex, filteredProjects]);
 
   return (
     <section
       id="projects"
-      className="relative overflow-hidden border-b hairline bg-[var(--color-bg)] pt-[var(--section-space)]"
+      className="relative overflow-hidden border-b hairline py-[var(--section-space-tight)] transition-colors duration-1000"
+      style={{ backgroundColor: activeThemeColor }}
       aria-label="Projects Section"
     >
-      <div className="site-shell">
-        <div className="editorial-grid mb-14 md:mb-20">
+      <TechnicalGrid />
+
+      <div className="site-shell mb-10">
+        <div className="editorial-grid">
           <div className="col-span-12 md:col-span-4">
-            <div className="micro-label">
-              02 // SHIPPED SYSTEMS
+            <div className="micro-label text-accent">
+              02 // SYSTEMS EXPLORER
             </div>
           </div>
           <div className="col-span-12 md:col-span-8">
             <HeadlineReveal
               lines={[
-                <span key="production">Production</span>,
-                <span key="implementations">Implementations<span className="text-accent">.</span></span>,
+                <span key="production">Shipped AI</span>,
+                <span key="implementations">Architectures{activeCapability ? ` / ${activeCapability}` : ""}<span className="text-accent">.</span></span>,
               ]}
             />
           </div>
         </div>
-
       </div>
 
-      <CurvedProjectCarousel
-        projects={projectsData}
-        onSelect={setSelectedProject}
-      />
+      <div className="relative w-full overflow-hidden py-10">
+        {filteredProjects.length > 0 ? (
+          <div
+            ref={scrollContainerRef}
+            onScroll={handleScroll}
+            className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-none px-[var(--grid-margin)]"
+            style={{ scrollbarWidth: "none" }}
+          >
+            {filteredProjects.map((project, index) => (
+              <ProjectCard
+                key={project.id}
+                project={project}
+                index={index}
+                isActive={index === activeIndex}
+                onClick={() => setSelectedProject(project)}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-20 text-[var(--color-dim)] font-mono text-sm">
+            NO_PROJECTS_FOUND_MATCHING_SELECTED_CAPABILITY
+          </div>
+        )}
+
+        {filteredProjects.length > 1 && (
+          <div className="flex justify-center items-center gap-3 mt-12">
+            {filteredProjects.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => {
+                  const container = scrollContainerRef.current;
+                  if (!container) return;
+                  let cardWidth = container.clientWidth * 0.82;
+                  if (window.innerWidth >= 1024) cardWidth = container.clientWidth * 0.28;
+                  else if (window.innerWidth >= 640) cardWidth = container.clientWidth * 0.45;
+
+                  const step = cardWidth + 16;
+                  container.scrollTo({
+                    left: index * step - (container.clientWidth - cardWidth) / 2,
+                    behavior: "smooth"
+                  });
+                  setActiveIndex(index);
+                }}
+                className={`h-1 transition-all duration-300 rounded-full ${
+                  index === activeIndex ? "w-8 bg-[var(--color-accent)]" : "w-2 bg-white/20"
+                }`}
+                aria-label={`Go to slide ${index + 1}`}
+              />
+            ))}
+          </div>
+        )}
+      </div>
 
       <SlideOverCaseStudy
         isOpen={!!selectedProject}
