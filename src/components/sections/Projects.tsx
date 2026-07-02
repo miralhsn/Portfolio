@@ -1,12 +1,10 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
-import { useRef, useState, useEffect } from "react";
-import { ExternalLink, GitBranch, Terminal } from "lucide-react";
-import { GridLightBackground } from "@/components/Backgrounds";
+import { useCallback, useState } from "react";
+import { ArrowUpRight, Terminal } from "lucide-react";
+import HeadlineReveal from "@/components/motion/HeadlineReveal";
 import { SlideOverCaseStudy, type CaseStudyData } from "@/components/SlideOverCaseStudy";
 
-// Project Data with complete specifications for slide-overs
 const projectsData: CaseStudyData[] = [
   {
     id: "securevision",
@@ -36,7 +34,7 @@ const projectsData: CaseStudyData[] = [
     results: "Deployed in 5 high-traffic retail spaces. Reached 94% precision on shoplifting alerts, and decreased total false alarm logs by 89%, saving security operators hours of manual review.",
     lessonsLearned: "Telemetry is vital: real-time GPU/CPU resource dashboards saved countless debugging hours during deployment. Clean and diverse Re-ID data is the primary bottleneck for multi-camera tracking stability.",
     techStack: ["YOLOv10", "DeepSORT", "PyTorch", "GStreamer", "FastAPI", "PostgreSQL"],
-    color: "#6D5EF8",
+    color: "#d8d1c2",
     github: "https://github.com/miralhsn/SecureVision",
     demo: "https://github.com/miralhsn"
   },
@@ -68,7 +66,7 @@ const projectsData: CaseStudyData[] = [
     results: "Reduced average developer review cycles by 35% across integrated repositories. Achieved a 92% security anomaly detection precision rate. Logged a 0% JSON structural parser error rate.",
     lessonsLearned: "Strict parsing schema structures are mandatory for production LLM integrations. LLMs must be fed localized AST trees, not raw file text, to avoid context-token bloat and hallucination patterns.",
     techStack: ["GPT-4", "LangChain", "FastAPI", "Pydantic", "Redis", "GitHub API"],
-    color: "#7EE7FF",
+    color: "#d8d1c2",
     github: "https://github.com/miralhsn/AI-Code-Reviewer",
     demo: "https://github.com/miralhsn"
   },
@@ -101,196 +99,206 @@ const projectsData: CaseStudyData[] = [
     results: "Delivers query answers with <800ms total latency. Achieved an NDCG@10 rank score of 0.89. Increased corporate search success rates by 87% compared to historical BM25 databases.",
     lessonsLearned: "Hybrid retrieval is mandatory for robust production search. Embedding models must be periodically fine-tuned or augmented with custom domain synonym dictionaries to capture industry-specific vocabulary.",
     techStack: ["FAISS", "OpenAI Embeddings", "LangChain", "FastAPI", "Next.js", "Redis"],
-    color: "#C084FC",
+    color: "#d8d1c2",
     github: "https://github.com/miralhsn/Semantic-Search",
     demo: "https://github.com/miralhsn"
   }
 ];
 
-// ─── TILT CARD COMPONENT ──────────────────────────────────────────────
-function ProjectCard({
+function ProjectPreview({
+  project,
+  index,
+  position,
+  visible,
+}: {
+  project: CaseStudyData | null;
+  index: number;
+  position: { x: number; y: number };
+  visible: boolean;
+}) {
+  if (!project) return null;
+
+  return (
+    <div
+      className="pointer-events-none fixed z-40 hidden w-[27rem] border hairline bg-[var(--color-bg-soft)] p-5 transition-[opacity,transform] duration-300 ease-[var(--ease-out-expo)] lg:block"
+      style={{
+        left: position.x,
+        top: position.y,
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translate3d(0,0,0) scale(1)" : "translate3d(0,14px,0) scale(0.96)",
+      }}
+    >
+      <div className="aspect-[4/3] border hairline bg-[var(--color-bg)] p-5">
+        <div className="flex h-full flex-col justify-between">
+          <div className="flex items-start justify-between gap-6">
+            <span className="display-type text-[6rem] leading-none text-[rgba(247,246,240,0.08)]">
+              {String(index + 1).padStart(2, "0")}
+            </span>
+            <span className="micro-label text-right">{project.status}</span>
+          </div>
+          <div>
+            <p className="micro-label mb-3">{project.id}</p>
+            <p className="max-w-[18rem] text-base font-semibold leading-tight text-[var(--color-text)]">
+              {project.name}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ProjectRow({
   project,
   index,
   onClick,
+  onHoverStart,
+  onHoverMove,
+  onHoverEnd,
+  active,
+  dimmed,
 }: {
   project: CaseStudyData;
   index: number;
   onClick: () => void;
+  onHoverStart: (project: CaseStudyData, index: number, e: React.MouseEvent) => void;
+  onHoverMove: (e: React.MouseEvent) => void;
+  onHoverEnd: () => void;
+  active: boolean;
+  dimmed: boolean;
 }) {
-  const cardRef = useRef<HTMLDivElement>(null);
-  const [tiltStyle, setTiltStyle] = useState<React.CSSProperties>({});
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-    
-    // Relative coordinates from center of card (-0.5 to 0.5)
-    const mouseX = (e.clientX - rect.left - width / 2) / (width / 2);
-    const mouseY = (e.clientY - rect.top - height / 2) / (height / 2);
-    
-    // Rotate max 6 degrees
-    const rotateX = -mouseY * 6;
-    const rotateY = mouseX * 6;
-
-    setTiltStyle({
-      transform: `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.015, 1.015, 1.015)`,
-      transition: "transform 0.1s ease-out",
-    });
-  };
-
-  const handleMouseLeave = () => {
-    setTiltStyle({
-      transform: "perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)",
-      transition: "transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
-    });
-  };
-
   return (
-    <motion.div
-      ref={cardRef}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      style={tiltStyle}
+    <button
+      type="button"
       onClick={onClick}
-      // Float up and down slowly, offset by index
-      animate={{
-        y: [0, -6, 0],
-      }}
-      transition={{
-        duration: 5 + index * 0.6,
-        repeat: Infinity,
-        ease: "easeInOut",
-      }}
-      className="project-card group relative flex flex-col justify-between h-full rounded-2xl border border-white/[0.06] bg-[#070B14]/30 p-6 backdrop-blur-md transition-all duration-300 hover:border-white/[0.15] hover:bg-white/[0.01]"
-      data-cursor="card"
+      onMouseEnter={(e) => onHoverStart(project, index, e)}
+      onMouseMove={onHoverMove}
+      onMouseLeave={onHoverEnd}
+      data-cursor="VIEW"
+      className="focus-ring group grid w-full grid-cols-12 gap-4 border-t hairline py-7 text-left transition-[opacity,padding] duration-300 ease-[var(--ease-out-expo)] hover:px-3 md:py-10"
+      style={{ opacity: dimmed && !active ? 0.34 : 1 }}
     >
-      {/* Glow highlight */}
-      <div
-        className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-        style={{
-          background: `radial-gradient(400px circle at 50% 50%, ${project.color}0a, transparent 75%)`,
-        }}
-      />
+      <div className="col-span-3 sm:col-span-2 lg:col-span-1">
+        <span className="micro-label">{String(index + 1).padStart(2, "0")}</span>
+      </div>
 
-      <div>
-        {/* Card Header (Project Title & Status Badge) */}
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
-            <span
-              className="h-1.5 w-1.5 rounded-full"
-              style={{
-                backgroundColor: project.color,
-                boxShadow: `0 0 8px ${project.color}`,
-              }}
-            />
-            <span className="font-mono text-[9px] uppercase tracking-widest text-slate-500">
-              {project.id}
-            </span>
-          </div>
-          <span
-            className="rounded-full px-2 py-0.5 font-mono text-[9px] font-semibold border"
-            style={{
-              borderColor: `${project.color}30`,
-              backgroundColor: `${project.color}08`,
-              color: project.color,
-            }}
-          >
-            {project.status}
-          </span>
-        </div>
-
-        {/* Project Name */}
-        <h3 className="text-lg font-bold text-white mb-2 group-hover:text-[#7EE7FF] transition-colors">
+      <div className="col-span-9 sm:col-span-5 lg:col-span-4">
+        <span className="micro-label mb-3 block">{project.id}</span>
+        <h3 className="text-[clamp(2.5rem,6vw,6rem)] transition-colors duration-300 group-hover:text-[var(--color-accent)]">
           {project.name}
         </h3>
+      </div>
 
-        {/* Short Description */}
-        <p className="text-xs leading-relaxed text-slate-400 mb-6">
-          {project.shortDescription}
+      <div className="col-span-12 sm:col-span-5 lg:col-span-4">
+        <div className="mb-4 flex flex-wrap items-center gap-x-3 gap-y-2">
+          <span className="micro-label text-accent">{project.status}</span>
+          <span className="h-px w-8 bg-[var(--color-line)]" />
+          <span className="body-small text-[var(--color-muted)]">{project.tagline}</span>
+        </div>
+        <p className="body-small max-w-[42rem]">{project.shortDescription}</p>
+        <p className="mt-5 text-xs font-semibold leading-relaxed text-dim">
+          {project.techStack.join(" / ")}
         </p>
       </div>
 
-      <div>
-        {/* Tech Stack pills */}
-        <div className="flex flex-wrap gap-1.5 mb-6">
-          {project.techStack.map((tech) => (
-            <span
-              key={tech}
-              className="rounded bg-white/[0.03] border border-white/[0.05] px-2 py-0.5 font-mono text-[9px] text-slate-500 hover:text-white hover:border-[#6D5EF8]/35 transition-colors"
-            >
-              {tech}
-            </span>
-          ))}
-        </div>
-
-        {/* Footer Actions */}
-        <div className="flex items-center gap-4 border-t border-white/[0.06] pt-4 font-mono text-[10px] text-slate-500">
-          <span className="flex items-center gap-1.5 hover:text-white transition-colors cursor-pointer">
-            <Terminal size={11} />
-            <span>Case Study</span>
-          </span>
-          <span className="ml-auto text-[9px] text-slate-600 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all">
-            Explore →
-          </span>
-        </div>
+      <div className="col-span-12 flex items-end justify-between gap-4 text-sm font-bold text-[var(--color-text)] sm:col-span-12 lg:col-span-3 lg:justify-end">
+        <span className="inline-flex items-center gap-2">
+          <Terminal size={15} strokeWidth={1.8} />
+          <span>Case Study</span>
+        </span>
+        <span className="inline-flex items-center gap-2 text-dim transition-colors duration-300 group-hover:text-[var(--color-text)]">
+          <span>Explore â†’</span>
+          <ArrowUpRight size={17} strokeWidth={1.6} className="transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
+        </span>
       </div>
-    </motion.div>
+    </button>
   );
 }
 
-// ─── PROJECTS SECTION COMPONENT ──────────────────────────────────────
 export default function Projects() {
   const [selectedProject, setSelectedProject] = useState<CaseStudyData | null>(null);
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-100px" });
+  const [activeProject, setActiveProject] = useState<CaseStudyData | null>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [previewVisible, setPreviewVisible] = useState(false);
+  const [previewPosition, setPreviewPosition] = useState({ x: 0, y: 0 });
+  const previewProject = activeProject ?? projectsData[0];
+
+  const updatePreviewPosition = useCallback((e: React.MouseEvent) => {
+    const width = 432;
+    const height = 380;
+    const x = Math.min(Math.max(e.clientX + 28, 24), window.innerWidth - width - 24);
+    const y = Math.min(Math.max(e.clientY - height / 2, 24), window.innerHeight - height - 24);
+    setPreviewPosition({ x, y });
+  }, []);
+
+  const handleHoverStart = useCallback(
+    (project: CaseStudyData, index: number, e: React.MouseEvent) => {
+      setActiveProject(project);
+      setActiveIndex(index);
+      setPreviewVisible(true);
+      updatePreviewPosition(e);
+    },
+    [updatePreviewPosition],
+  );
+
+  const handleHoverMove = useCallback(
+    (e: React.MouseEvent) => {
+      updatePreviewPosition(e);
+    },
+    [updatePreviewPosition],
+  );
+
+  const handleHoverEnd = useCallback(() => {
+    setPreviewVisible(false);
+  }, []);
 
   return (
     <section
       id="projects"
-      ref={ref}
-      className="relative min-h-screen w-full flex items-center justify-center overflow-hidden py-24 px-6 sm:px-10 bg-[#070B14]"
+      className="relative border-b hairline bg-[var(--color-bg)] section-space"
       aria-label="Projects Section"
     >
-      {/* Grid Light Beam Animation */}
-      <GridLightBackground />
-
-      <div className="relative z-10 mx-auto max-w-[1200px] w-full">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="mb-16 text-left"
-        >
-          <div className="font-mono text-xs uppercase tracking-widest text-[#7EE7FF] mb-3">
-            02 // SHIPPED SYSTEMS
+      <div className="site-shell">
+        <div className="editorial-grid mb-14 md:mb-20">
+          <div className="col-span-12 md:col-span-4">
+            <div className="micro-label">
+              02 // SHIPPED SYSTEMS
+            </div>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-bold text-white tracking-tight uppercase">
-            Production Implementations<span className="text-[#6D5EF8]">.</span>
-          </h2>
-        </motion.div>
+          <div className="col-span-12 md:col-span-8">
+            <HeadlineReveal
+              lines={[
+                <span key="production">Production</span>,
+                <span key="implementations">Implementations<span className="text-accent">.</span></span>,
+              ]}
+            />
+          </div>
+        </div>
 
-        {/* Card Grid Layout */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={inView ? { opacity: 1 } : {}}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-        >
+        <div className="border-b hairline">
           {projectsData.map((project, idx) => (
-            <ProjectCard
+            <ProjectRow
               key={project.id}
               project={project}
               index={idx}
               onClick={() => setSelectedProject(project)}
+              onHoverStart={handleHoverStart}
+              onHoverMove={handleHoverMove}
+              onHoverEnd={handleHoverEnd}
+              active={activeProject?.id === project.id}
+              dimmed={activeProject !== null && previewVisible}
             />
           ))}
-        </motion.div>
+        </div>
       </div>
 
-      {/* Slide-Over Panel Details */}
+      <ProjectPreview
+        project={previewProject}
+        index={activeIndex}
+        position={previewPosition}
+        visible={previewVisible}
+      />
+
       <SlideOverCaseStudy
         isOpen={!!selectedProject}
         data={selectedProject}

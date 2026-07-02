@@ -6,14 +6,13 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        bg:       "#060811",
-        primary:  "#6366f1",
-        accent:   "#22d3ee",
-        violet:   "#a855f7",
+        bg: "var(--color-bg)",
+        surface: "var(--color-surface)",
+        accent: "var(--color-accent)",
       },
       fontFamily: {
-        sans: ["Inter", "system-ui", "sans-serif"],
-        mono: ["JetBrains Mono", "monospace"],
+        sans: ["var(--font-text-stack)"],
+        display: ["var(--font-display-stack)"],
       },
       screens: {
         xs: "480px",

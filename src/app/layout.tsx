@@ -1,7 +1,20 @@
 import type { Metadata } from "next";
+import { Bebas_Neue, Manrope } from "next/font/google";
 import "./globals.css";
 import { siteConfig } from "@/lib/site";
 import CustomCursor from "@/components/CustomCursor";
+import SmoothScrollProvider from "@/components/motion/SmoothScrollProvider";
+
+const display = Bebas_Neue({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-display",
+});
+
+const grotesk = Manrope({
+  subsets: ["latin"],
+  variable: "--font-grotesk",
+});
 
 export const metadata: Metadata = {
   title: "Miral Hasan — AI Systems Engineer",
@@ -21,15 +34,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-      </head>
+    <html lang="en" className={`${display.variable} ${grotesk.variable}`}>
       <body className="noise">
         <CustomCursor />
-        {children}
+        <SmoothScrollProvider>{children}</SmoothScrollProvider>
       </body>
     </html>
   );
