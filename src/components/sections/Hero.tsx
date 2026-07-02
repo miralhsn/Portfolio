@@ -12,14 +12,6 @@ export default function Hero() {
       aria-label="Hero Section"
     >
       <div className="site-shell editorial-grid min-h-[calc(100vh-7rem)] content-end pb-14 sm:pb-20">
-        <div className="col-span-12 mb-14 flex items-center justify-between gap-6 border-b hairline pb-4 text-dim md:col-span-10 md:col-start-2">
-          <div className="flex items-center gap-2">
-            <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-accent)]" />
-            <span className="micro-label">Available for Senior Roles</span>
-          </div>
-          <span className="micro-label hidden sm:inline">Scroll</span>
-        </div>
-
         <div className="col-span-12 md:col-span-10 md:col-start-2">
           <HeadlineReveal
             as="h1"

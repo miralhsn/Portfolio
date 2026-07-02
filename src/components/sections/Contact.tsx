@@ -35,18 +35,18 @@ export default function Contact() {
             </p>
           </div>
 
-          <div className="col-span-12 mt-16 md:col-span-9 md:col-start-4">
+          <div className="col-span-12 mt-12 md:col-span-6 md:col-start-7">
             <MagneticLink
               href={`mailto:${siteConfig.contactEmail}`}
               cursorLabel="OPEN"
-              className="focus-ring group inline-flex max-w-full items-center gap-4 border-b border-[var(--color-accent)] pb-3 text-[clamp(1.8rem,5vw,5rem)] font-semibold leading-none text-[var(--color-text)]"
+              className="focus-ring group inline-flex max-w-full items-center gap-3 border-b border-[var(--color-accent)] pb-2 text-[clamp(1.05rem,2vw,1.55rem)] font-bold leading-tight text-[var(--color-text)]"
             >
-              <span className="truncate">{siteConfig.contactEmail}</span>
-              <ArrowUpRight size={28} strokeWidth={1.5} className="shrink-0 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
+              <span className="break-all">{siteConfig.contactEmail}</span>
+              <ArrowUpRight size={20} strokeWidth={1.5} className="shrink-0 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
             </MagneticLink>
           </div>
 
-          <div className="col-span-12 mt-10 flex flex-wrap gap-8 md:col-span-9 md:col-start-4">
+          <div className="col-span-12 mt-10 flex flex-wrap gap-8 md:col-span-6 md:col-start-7">
             <a
               href={siteConfig.linkedinUrl}
               target="_blank"

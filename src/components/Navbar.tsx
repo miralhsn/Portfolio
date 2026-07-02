@@ -49,18 +49,18 @@ export default function Navbar() {
           scrolled ? "border-[var(--color-line)] bg-[rgba(5,6,8,0.88)]" : "border-transparent bg-transparent"
         }`}
       >
-        <nav className="site-shell flex h-20 items-center justify-between">
+        <nav className="site-shell grid h-20 grid-cols-[1fr_auto_1fr] items-center">
           <a
             href="#"
             aria-label="Home"
             data-cursor="OPEN"
-            className="focus-ring flex items-center gap-2 text-sm font-extrabold tracking-tight text-[var(--color-text)]"
+            className="focus-ring flex w-fit items-center gap-2 text-sm font-extrabold tracking-tight text-[var(--color-text)]"
           >
             <span>MH</span>
             <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-accent)]" />
           </a>
 
-          <div className="hidden items-center gap-8 md:flex">
+          <div className="hidden items-center justify-center gap-8 md:flex">
             {links.map((link) => (
               <a
                 key={link.href}
@@ -74,11 +74,7 @@ export default function Navbar() {
             ))}
           </div>
 
-          <div className="hidden items-center gap-5 md:flex">
-            <div className="flex items-center gap-2 border hairline px-3 py-1 text-xs font-bold text-muted">
-              <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-accent)]" />
-              <span>Available</span>
-            </div>
+          <div className="hidden justify-self-end md:block">
             <div className="min-w-[76px] text-right text-xs font-bold tabular-nums text-dim">
               {time || "00:00:00"}
             </div>
@@ -89,7 +85,7 @@ export default function Navbar() {
             onClick={() => setOpen(!open)}
             aria-label="Toggle menu"
             data-cursor="OPEN"
-            className="focus-ring flex h-10 w-10 items-center justify-center border hairline text-[var(--color-text)] md:hidden"
+            className="focus-ring col-start-3 flex h-10 w-10 items-center justify-center justify-self-end border hairline text-[var(--color-text)] md:hidden"
           >
             {open ? <X size={18} strokeWidth={1.8} /> : <Menu size={18} strokeWidth={1.8} />}
           </button>
@@ -111,11 +107,7 @@ export default function Navbar() {
             ))}
           </div>
 
-          <div className="mt-auto flex items-center justify-between border-t hairline pt-6 text-xs font-bold text-muted">
-            <div className="flex items-center gap-2">
-              <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-accent)]" />
-              <span>Available to hire</span>
-            </div>
+          <div className="mt-auto flex items-center justify-end border-t hairline pt-6 text-xs font-bold text-muted">
             <div>{time || "00:00:00"}</div>
           </div>
         </div>
